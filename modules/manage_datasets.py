@@ -95,7 +95,8 @@ def get_data_from_composite_dataset(file_name="composite_db.csv", cases=True):
 
     Raises:
         FileNotFoundError: If the CSV file is not found at the specified path.
-    """    
+    """
+    
     try:
         path = os.path.join(get_DB_path(), file_name)
         dataframe = pd.read_csv(path)

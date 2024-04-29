@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>score_generator module</title>
+    
+          <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../_static/documentation_options.js?v=556ec38a"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../_static/theme-vendors.js"></script> -->
+      <script src="../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../genindex.html" />
+  <link rel="search" title="Search" href="../search.html" />
+  <link rel="next" title="sentiment_analysis module" href="sentiment_analysis.html" />
+  <link rel="prev" title="process_datasets module" href="process_datasets.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../index.html" class="home-link">
+    
+      <span class="site-name">Depression Analysis Classifier</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../index.html#contents">Contents:</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="audio_manager.html" class="reference internal ">AudioManager</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="depression_analysis_classifier.html" class="reference internal ">Depression Analysis Classifier</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="manage_datasets.html" class="reference internal ">Manage Datasets</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="model_performance.html" class="reference internal ">Model Performance</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="process_datasets.html" class="reference internal ">Process Datasets</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Score Generator</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#module-score_generator" class="reference internal">score_generator module</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="sentiment_analysis.html" class="reference internal ">Sentiment Analysis</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="utils.html" class="reference internal ">Utils</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+    
+    <li>score_generator module</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="process_datasets.html"
+       title="previous chapter">← process_datasets module</a>
+  </li>
+  <li class="next">
+    <a href="sentiment_analysis.html"
+       title="next chapter">sentiment_analysis module →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="module-score_generator">
+<span id="score-generator-module"></span><h1>score_generator module<a class="headerlink" href="#module-score_generator" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="score_generator.generate_output_score">
+<span class="sig-prename descclassname"><span class="pre">score_generator.</span></span><span class="sig-name descname"><span class="pre">generate_output_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_cases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive_cases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#score_generator.generate_output_score" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate a weighted output score based on the provided case data and weight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>total_cases</strong> (<em>int</em>) – Total number of cases considered.</p></li>
+<li><p><strong>positive_cases</strong> (<em>int</em>) – Number of positive cases among the total.</p></li>
+<li><p><strong>weight</strong> (<em>float</em>) – Weighting factor to adjust the influence of positive cases.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Normalized score adjusted by weight, scaled to a maximum of 1.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="score_generator.generate_prediction_from_sentence">
+<span class="sig-prename descclassname"><span class="pre">score_generator.</span></span><span class="sig-name descname"><span class="pre">generate_prediction_from_sentence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wordnet_score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framenet_score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sentiment_analysis_score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#score_generator.generate_prediction_from_sentence" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a binary prediction from scores based on WordNet, FrameNet, and sentiment analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wordnet_score</strong> (<em>float</em>) – Score derived from WordNet analysis.</p></li>
+<li><p><strong>framenet_score</strong> (<em>float</em>) – Score derived from FrameNet analysis.</p></li>
+<li><p><strong>sentiment_analysis_score</strong> (<em>float</em>) – Score derived from sentiment analysis.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – Threshold value to determine the prediction outcome.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>1 if the combined score is above the threshold, otherwise 0.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="score_generator.generate_score">
+<span class="sig-prename descclassname"><span class="pre">score_generator.</span></span><span class="sig-name descname"><span class="pre">generate_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depression_counter_dictionary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">not_depressed_counter_dictionary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#score_generator.generate_score" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a score by analyzing the presence of certain words in the input text, using specified word frequency dictionaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>str</em>) – The input text to analyze.</p></li>
+<li><p><strong>depression_counter_dictionary</strong> (<em>dict</em>) – Dictionary of word frequencies related to positive cases.</p></li>
+<li><p><strong>not_depressed_counter_dictionary</strong> (<em>dict</em>) – Dictionary of word frequencies not related to negative cases.</p></li>
+<li><p><strong>weight</strong> (<em>float</em>) – Weight factor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Calculated score based on the input and dictionaries.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="score_generator.generate_sentiment_analysis_score">
+<span class="sig-prename descclassname"><span class="pre">score_generator.</span></span><span class="sig-name descname"><span class="pre">generate_sentiment_analysis_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#score_generator.generate_sentiment_analysis_score" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a weighted sentiment analysis score for the given input text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>str</em>) – The input text to analyze.</p></li>
+<li><p><strong>weight</strong> (<em>float</em>) – Weight factor to apply to the sentiment score.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The sentiment score, weighted and rounded to two decimal places.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="score_generator.process_input">
+<span class="sig-prename descclassname"><span class="pre">score_generator.</span></span><span class="sig-name descname"><span class="pre">process_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#score_generator.process_input" title="Link to this definition">¶</a></dt>
+<dd><p>Processes the input text by adding WordNet information, tokenizing, stemming, and removing stopwords.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_text</strong> (<em>str</em>) – Text to be processed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A set of stemmed tokens from the processed input text.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>set</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="process_datasets.html"
+       title="previous chapter">← process_datasets module</a>
+  </li>
+  <li class="next">
+    <a href="sentiment_analysis.html"
+       title="next chapter">sentiment_analysis module →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, Bianchetti Federico.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

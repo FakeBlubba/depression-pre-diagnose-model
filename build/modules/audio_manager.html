@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>audio_manager module</title>
+    
+          <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../_static/documentation_options.js?v=556ec38a"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../_static/theme-vendors.js"></script> -->
+      <script src="../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../genindex.html" />
+  <link rel="search" title="Search" href="../search.html" />
+  <link rel="next" title="depression_analysis_classifier module" href="depression_analysis_classifier.html" />
+  <link rel="prev" title="Welcome to Depression Analysis Classifier’s documentation!" href="../index.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../index.html" class="home-link">
+    
+      <span class="site-name">Depression Analysis Classifier</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../index.html#contents">Contents:</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">audio_manager module</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#module-audio_manager" class="reference internal">audio_manager module</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="depression_analysis_classifier.html" class="reference internal ">depression_analysis_classifier module</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="manage_datasets.html" class="reference internal ">manage_datasets module</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="model_performance.html" class="reference internal ">model_performance module</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="process_datasets.html" class="reference internal ">process_datasets module</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="score_generator.html" class="reference internal ">score_generator module</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="sentiment_analysis.html" class="reference internal ">sentiment_analysis module</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="utils.html" class="reference internal ">utils module</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+    
+    <li>audio_manager module</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="../index.html"
+       title="previous chapter">← Welcome to Depression Analysis Classifier’s documentation!</a>
+  </li>
+  <li class="next">
+    <a href="depression_analysis_classifier.html"
+       title="next chapter">depression_analysis_classifier module →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="module-audio_manager">
+<span id="audio-manager-module"></span><h1>audio_manager module<a class="headerlink" href="#module-audio_manager" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="audio_manager.get_preferred_input_device">
+<span class="sig-prename descclassname"><span class="pre">audio_manager.</span></span><span class="sig-name descname"><span class="pre">get_preferred_input_device</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#audio_manager.get_preferred_input_device" title="Link to this definition">¶</a></dt>
+<dd><p>Queries the system for the preferred audio input device and prints its details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary containing the name, maximum input channels, and device ID of the preferred input device.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="audio_manager.record_voice">
+<span class="sig-prename descclassname"><span class="pre">audio_manager.</span></span><span class="sig-name descname"><span class="pre">record_voice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silence_duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">44100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#audio_manager.record_voice" title="Link to this definition">¶</a></dt>
+<dd><p>Records voice from the input device until a specified duration of silence is detected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>threshold</strong> (<em>float</em>) – The amplitude below which sound is considered silence. Default is 0.01.</p></li>
+<li><p><strong>silence_duration</strong> (<em>int</em>) – The duration (in seconds) of silence after which recording stops. Default is 2 seconds.</p></li>
+<li><p><strong>fs</strong> (<em>int</em>) – Sampling frequency in Hz. Default is 44100 Hz.</p></li>
+<li><p><strong>channels</strong> (<em>int</em>) – Number of audio channels. Default is 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array containing the recorded audio data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="audio_manager.save_audio_file">
+<span class="sig-prename descclassname"><span class="pre">audio_manager.</span></span><span class="sig-name descname"><span class="pre">save_audio_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#audio_manager.save_audio_file" title="Link to this definition">¶</a></dt>
+<dd><p>Records voice, saves it to a file, and prints a message upon stopping the recording.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – The name of the file where the audio will be saved.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="audio_manager.transcript_audio">
+<span class="sig-prename descclassname"><span class="pre">audio_manager.</span></span><span class="sig-name descname"><span class="pre">transcript_audio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">KEY</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2f1cb1f1178d454bbf8ffe55db3a6551'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#audio_manager.transcript_audio" title="Link to this definition">¶</a></dt>
+<dd><p>Transcribes audio from a file using an API and prints the transcription or error message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>str</em>) – The name of the audio file to be transcribed.</p></li>
+<li><p><strong>KEY</strong> (<em>str</em>) – API key used for the transcription service.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>After transcription, the audio file is deleted from the storage.</p>
+</div>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="../index.html"
+       title="previous chapter">← Welcome to Depression Analysis Classifier’s documentation!</a>
+  </li>
+  <li class="next">
+    <a href="depression_analysis_classifier.html"
+       title="next chapter">depression_analysis_classifier module →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2024, Bianchetti Federico.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.9.1.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

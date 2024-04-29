@@ -57,8 +57,8 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         self.not_depressed_word_counter = process_datasets.get_frequent_words(not_depressed_words, self.percentage_to_maintain)
         
         # FrameNet
-        self.framenet_word_counter = process_datasets.get_framenet_words(depressed_words)
-        self.framenet_word_counter = process_datasets.get_framenet_words(not_depressed_words)
+        self.framenet_word_counter = process_datasets.add_framenet_info_to_token(depressed_words)
+        self.not_framenet_word_counter = process_datasets.add_framenet_info_to_token(not_depressed_words)
 
         
         print('ending fit...')
@@ -82,7 +82,7 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
             predictions = []
             for text in X:
                 wn_score = score_generator.generate_score(text, self.depressed_word_counter, self.not_depressed_word_counter, self.wn_weight)
-                fm_score = score_generator.generate_score(text, None, None, self.fn_weight)
+                fm_score = score_generator.generate_score(text, self.framenet_word_counter, self.not_framenet_word_counter, self.fn_weight)
                 sa_score = score_generator.generate_sentiment_analysis_score(text, self.sa_weight)
                 print(f"wordnet: {wn_score},\t framenet: {fm_score},\t sentiment_analysis: {sa_score}")
                 prediction = score_generator.generate_prediction_from_sentence(wn_score, fm_score, sa_score, self.threshold)
