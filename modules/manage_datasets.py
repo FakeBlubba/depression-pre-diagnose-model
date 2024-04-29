@@ -29,13 +29,22 @@ def get_data_from_ddrc():
 def create_dataset(data, file_name = "composite_db.csv"):
     path = os.path.join(get_DB_path(), file_name)
 
-    df = pd.DataFrame(data, columns=["Stringa", "Intero"])
-    df.to_csv(file_name, index=True)
+    df = pd.DataFrame(data, columns=["Data", "Value (1 is depressed / 0 is not depressed)"])
+    df.to_csv(path, index=True)
+
+def get_data_from_composite_dataset(file_name="composite_db.csv", cases=True):
+    try:
+        path = os.path.join(get_DB_path(), file_name)
+        dataframe = pd.read_csv(path)
+
+        if cases in [True, False]:  
+            dataframe = dataframe[dataframe.iloc[:, 2] == int(cases)]
+        return [element for index, element in enumerate(dataframe.values.tolist()) if isinstance(element[1], str)]
+    except FileNotFoundError:
+        return -1
 
 
-
-
-db = get_data_from_SAaDd()
-print(db[0])
-db2 = get_data_from_ddrc()
-print(db2[0])
+#db = get_data_from_SAaDd()
+#print(db[0])
+#db2 = get_data_from_ddrc()
+#print(db2[0])
