@@ -53,11 +53,32 @@ def get_infos_from_list_of_sentences(list_of_sentences):
     output = []
     for index, record in enumerate(list_of_sentences):
         sentence = record[1]
-        sentence = add_wordnet_info_to_token(record[1])       
+        sentence = add_wordnet_info_to_token(record[1])    
         sentence = get_stems_from_sentence(sentence)
         output.append([record[0], sentence, record[2]])
     return output 
         
+def get_infos_from_list_of_sentences_framenet(list_of_sentences):
+    """
+    Processes a list of sentence records by adding WordNet information to each sentence, stemming the words, 
+    and then compiling a list with the updated sentences and their original associated data.
+
+    Args:
+        list_of_sentences (list of list/tuple): Each inner list or tuple should contain three elements: 
+            an identifier, the original sentence as a string, and additional associated data.
+
+    Returns:
+        list of list: A processed list where each element is a list containing the identifier, 
+            the processed and stemmed sentence, and the original additional data.
+    """
+    output = []
+    for index, record in enumerate(list_of_sentences):
+        sentence = record[1]
+        sentence = add_framenet_info_to_token(record[1])    
+        sentence = get_stems_from_sentence(sentence)
+        output.append([record[0], sentence, record[2]])
+    return output 
+
 def get_stems_from_sentence(sentence): 
     """
     Processes the input sentence to extract the stem of each word using the Snowball stemmer.

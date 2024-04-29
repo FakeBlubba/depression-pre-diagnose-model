@@ -39,6 +39,8 @@ def main():
     print("", response, "\t-Target: \t", data[-1][2]) """
     # TODO PENSARE DI AGGIUNGERE DATASET SULLA FELICITA'
     try:
+
+
         model_performance.get_model_accuracy()
     except Exception as e:
         print("error: ", e)
