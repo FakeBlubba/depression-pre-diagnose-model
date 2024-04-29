@@ -19,7 +19,7 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         fn_weight (float): The weight assigned to the FrameNet-derived features.
         sa_weight (float): The weight automatically calculated for sentiment analysis features.
     """
-    def __init__(self, percentage_to_maintain = 0.1, threshold = 0.8, wn_weight = 1/3 , fn_weight = 1/3):
+    def __init__(self, percentage_to_maintain = 0.1, threshold = 0.55, wn_weight = 1/3.5 , fn_weight = 1/3.5, sa_weight = 1/3):
         """
         Initializes the DepressionAnalysisClassifier with specified weights and threshold for classification.
 
@@ -33,7 +33,7 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         self.threshold = threshold
         self.wn_weight = wn_weight
         self.fn_weight = fn_weight
-        self.sa_weight = 1 - (wn_weight + fn_weight)
+        self.sa_weight = sa_weight
         
     def fit(self, X, y):
         """

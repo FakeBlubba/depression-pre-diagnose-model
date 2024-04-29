@@ -37,7 +37,6 @@ def main():
     model.fit(X, y)
     response = model.predict(input)
     print("", response, "\t-Target: \t", data[-1][2]) """
-    # TODO PENSARE DI AGGIUNGERE DATASET SULLA FELICITA'
     try:
 
 
