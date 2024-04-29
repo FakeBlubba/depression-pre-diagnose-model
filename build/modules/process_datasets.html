@@ -185,6 +185,28 @@
   <section id="module-process_datasets">
 <span id="process-datasets-module"></span><h1>process_datasets module<a class="headerlink" href="#module-process_datasets" title="Link to this heading">¶</a></h1>
 <dl class="py function">
+<dt class="sig sig-object py" id="process_datasets.add_framenet_info_to_token">
+<span class="sig-prename descclassname"><span class="pre">process_datasets.</span></span><span class="sig-name descname"><span class="pre">add_framenet_info_to_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#process_datasets.add_framenet_info_to_token" title="Link to this definition">¶</a></dt>
+<dd><p>Enhances a given text by appending the FrameNet definition of each unique token
+that is not a stop word or punctuation, provided a definition exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> (<em>str</em>) – The text string to be processed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>The original text string concatenated with the unique tokens and</dt><dd><p>their corresponding FrameNet definitions.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="process_datasets.add_wordnet_info_to_token">
 <span class="sig-prename descclassname"><span class="pre">process_datasets.</span></span><span class="sig-name descname"><span class="pre">add_wordnet_info_to_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#process_datasets.add_wordnet_info_to_token" title="Link to this definition">¶</a></dt>
 <dd><p>Enhances a given text by appending the WordNet definition of each unique token
@@ -261,6 +283,29 @@ Defaults to 0.1 (i.e., top 10%).</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="process_datasets.get_infos_from_list_of_sentences">
 <span class="sig-prename descclassname"><span class="pre">process_datasets.</span></span><span class="sig-name descname"><span class="pre">get_infos_from_list_of_sentences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_of_sentences</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#process_datasets.get_infos_from_list_of_sentences" title="Link to this definition">¶</a></dt>
+<dd><p>Processes a list of sentence records by adding WordNet information to each sentence, stemming the words,
+and then compiling a list with the updated sentences and their original associated data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>list_of_sentences</strong> (<em>list</em><em> of </em><em>list/tuple</em>) – Each inner list or tuple should contain three elements:
+an identifier, the original sentence as a string, and additional associated data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A processed list where each element is a list containing the identifier,</dt><dd><p>the processed and stemmed sentence, and the original additional data.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="process_datasets.get_infos_from_list_of_sentences_framenet">
+<span class="sig-prename descclassname"><span class="pre">process_datasets.</span></span><span class="sig-name descname"><span class="pre">get_infos_from_list_of_sentences_framenet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_of_sentences</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#process_datasets.get_infos_from_list_of_sentences_framenet" title="Link to this definition">¶</a></dt>
 <dd><p>Processes a list of sentence records by adding WordNet information to each sentence, stemming the words,
 and then compiling a list with the updated sentences and their original associated data.</p>
 <dl class="field-list simple">
