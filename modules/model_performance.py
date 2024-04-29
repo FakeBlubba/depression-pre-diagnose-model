@@ -6,6 +6,15 @@ import manage_datasets as md
 from depression_analysis_classifier import DepressionAnalysisClassifier
 
 def generate_weight_combinations(steps=10):
+    """
+    Generates a grid of weight combinations for three components summing up to 1.
+
+    Args:
+        steps (int, optional): Number of steps to divide the weight scale. Defaults to 10.
+
+    Returns:
+        list of tuples: A list of tuples, each representing a set of weights for three components.
+    """
     grid = []
     for wn_weight in np.linspace(0, 1, steps):
         for fn_weight in np.linspace(0, 1 - wn_weight, steps):
@@ -14,6 +23,12 @@ def generate_weight_combinations(steps=10):
     return grid
 
 def optimize_percentage_to_maintain():
+    """
+    Optimizes the 'percentage_to_maintain' parameter for a depression analysis model using grid search.
+
+    This function retrieves data from a composite dataset, uses it to train the model, and finds the best 
+    'percentage_to_maintain' value for maximizing accuracy via grid search cross-validation.
+    """    
     data = md.get_data_from_composite_dataset()
     X = [element[1] for element in data]
     y = [element[2] for element in data]
@@ -30,6 +45,18 @@ def optimize_percentage_to_maintain():
     print("best_parameter:", grid_search.best_params_)
     
 def optimize_hyperparameters(X, y, steps):
+    """
+    Optimizes the hyperparameters for a depression analysis model by exploring combinations of weights and thresholds.
+
+    Args:
+        X (list): The feature set.
+        y (list): The target variable (binary outcomes).
+        steps (int): The number of steps to generate weight combinations, impacting the granularity of the grid search.
+
+    Details:
+        This function tests combinations of weights for three components and different threshold levels, 
+        assessing their performance via cross-validation to determine the best performing parameters.
+    """
     weight_combinations = generate_weight_combinations(steps = steps)  # Usa meno passaggi per ridurre il tempo di calcolo
     threshold_values = np.linspace(0, 1, 10)
     
@@ -49,6 +76,13 @@ def optimize_hyperparameters(X, y, steps):
     print(f"Best parameters: {best_params}")
     
 def get_model_accuracy():
+    """
+    Evaluates the accuracy of the DepressionAnalysisClassifier model by performing cross-validation.
+
+    This function aggregates data from two conditions in the composite dataset, shuffles them for randomness,
+    and calculates the cross-validated accuracy of the model, reporting the mean and the confidence interval.
+    """
+
     model = DepressionAnalysisClassifier()    
     data = md.get_data_from_composite_dataset(cases = True) + md.get_data_from_composite_dataset(cases = False)
     random.shuffle(data)

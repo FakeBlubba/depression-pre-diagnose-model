@@ -3,6 +3,7 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import string
 from nltk.corpus import wordnet as wn
+from nltk.corpus import framenet as fn
 
 
 def format_datasets(datasets_list):
@@ -27,9 +28,10 @@ def get_infos_from_list_of_sentences(list_of_sentences):
     for index, record in enumerate(list_of_sentences):
         sentence = record[1]
         sentence = add_wordnet_info_to_token(record[1])
+        print(sentence)
+        break
         
         
-        # TODO METTERE FRAMENET
         
         sentence = get_stems_from_sentence(sentence)
         output.append([record[0], sentence, record[2]])
@@ -110,5 +112,3 @@ def get_frequent_words(records, percentage_to_mantain = 0.1):
     percentage_to_mantain = int(len(counter) * percentage_to_mantain)
     counter = counter[:percentage_to_mantain]
     return dict(counter)
-    
-    

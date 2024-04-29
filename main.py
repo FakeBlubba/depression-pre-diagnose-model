@@ -1,5 +1,6 @@
 import sys
 import random
+import nltk
 from pathlib import Path
 from nltk.corpus import stopwords
 
