@@ -19,7 +19,7 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         fn_weight (float): The weight assigned to the FrameNet-derived features.
         sa_weight (float): The weight automatically calculated for sentiment analysis features.
     """
-    def __init__(self, percentage_to_maintain = 0.1, threshold = 0.6, wn_weight = 1/2.5 , fn_weight = 1/2.5):
+    def __init__(self, percentage_to_maintain = 0.1, threshold = 0.8, wn_weight = 1/3 , fn_weight = 1/3):
         """
         Initializes the DepressionAnalysisClassifier with specified weights and threshold for classification.
 
@@ -46,7 +46,6 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         Returns:
             self: The instance of the classifier.
         """
-        print("starting fit...")
         depressed_data = [[index, X[index], y[index]] for index, target in enumerate(y) if target == 1]
         not_depressed_data = [[index,X[index], y[index]] for index, target in enumerate(y) if target == 0]
         depressed_words = process_datasets.get_infos_from_list_of_sentences(depressed_data)
@@ -63,7 +62,6 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         self.framenet_word_counter = process_datasets.get_frequent_words(fn_depressed_words)
         self.not_framenet_word_counter = process_datasets.get_frequent_words(fn_not_depressed_words)
         
-        print('ending fit...')
         return self
 
     def predict(self, X):
@@ -76,7 +74,6 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         Returns:
             np.array: Predictions for each input text.
         """
-        print("starting predict...")
         if not isinstance(X, list):
             if isinstance(X, str): 
                 X = [X]
@@ -90,7 +87,6 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
                 prediction = score_generator.generate_prediction_from_sentence(wn_score, fm_score, sa_score, self.threshold)
                 print(prediction)
                 predictions.append(prediction)
-                print("ending predict.")
                 
         except Exception as e:
             print(f"Error in predict: {e}")

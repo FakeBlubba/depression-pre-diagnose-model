@@ -89,7 +89,6 @@ def get_model_accuracy():
     X = [element[1] for element in data]
     y = [element[2] for element in data]
     scores = cross_val_score(model, X, y, cv = 5, n_jobs = -1)    
-    print(scores)
     print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 '''
 data = md.get_data_from_composite_dataset(cases = True) + md.get_data_from_composite_dataset(cases = False)
