@@ -55,9 +55,11 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         # WordNet
         self.depressed_word_counter = process_datasets.get_frequent_words(depressed_words, self.percentage_to_maintain)
         self.not_depressed_word_counter = process_datasets.get_frequent_words(not_depressed_words, self.percentage_to_maintain)
-        
+        print(self.depressed_word_counter[0])
         # FrameNet
         self.framenet_word_counter = process_datasets.add_framenet_info_to_token(depressed_words)
+        print(self.framenet_word_counter[0])
+
         self.not_framenet_word_counter = process_datasets.add_framenet_info_to_token(not_depressed_words)
 
         
