@@ -55,5 +55,5 @@ You can check the documentation clicking
 
 [here]: build/index.html	"Here"
 
-.
+. build/index.html
 
