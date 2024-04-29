@@ -51,9 +51,5 @@ input = audio_manager.transcription = audio_manager.transcript_audio("record.wav
 
 ## Documentation
 
-You can check the documentation clicking 
-
-[here]: build/index.html	"Here"
-
-. build/index.html
+You can check the documentation clicking [here]: build/index.html	"Here".
 
