@@ -35,10 +35,9 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         self.fn_weight = fn_weight
         self.sa_weight = 1 - (wn_weight + fn_weight)
         
-    # fit data to be useful following the standard
     def fit(self, X, y):
         """
-        Fit the DepressionAnalysisClassifier model to the training data.
+        Fit the model to the training data.
 
         Args:
             X (list of str): The input texts.
@@ -65,8 +64,16 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         print('ending fit...')
         return self
 
-    #   Predict the values
     def predict(self, X):
+        """
+        Predict depression from texts using the fitted model.
+
+        Args:
+            X (list of str or str): Input texts to classify.
+
+        Returns:
+            np.array: Predictions for each input text.
+        """
         print("starting predict...")
         if not isinstance(X, list):
             if isinstance(X, str): 
