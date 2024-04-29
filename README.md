@@ -46,7 +46,7 @@ If you want to use the implementation of Text Transcription to answer some quest
 ```python
 import audio_manager
 audio_manager.save_audio_file("record.wav")
-input = audio_manager.transcription = audio_manager.transcript_audio("record.wav")
+X_new = audio_manager.transcription = audio_manager.transcript_audio("record.wav")
 ```
 
 ## Documentation
