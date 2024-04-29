@@ -17,9 +17,9 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         threshold (float): The score threshold above which the classifier predicts depression.
         wn_weight (float): The weight assigned to the WordNet-derived features.
         fn_weight (float): The weight assigned to the FrameNet-derived features.
-        sa_weight (float): The weight automatically calculated for sentiment analysis features.
+        sa_weight (float): The weight automatically assigned to the sentiment analysis features.
     """
-    def __init__(self, percentage_to_maintain = 0.1, threshold = 0.55, wn_weight = 1/3.5 , fn_weight = 1/3.5, sa_weight = 1/3):
+    def __init__(self, percentage_to_maintain = 0.3, threshold = .35, wn_weight = 1/2.5 , fn_weight = 1/2.5, sa_weight = .2):
         """
         Initializes the DepressionAnalysisClassifier with specified weights and threshold for classification.
 

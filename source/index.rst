@@ -1,11 +1,8 @@
 .. Depression Analysis Classifier documentation master file, created by sphinx-quickstart.
    Include custom directives and templates here.
 
-Welcome to Depression Analysis Classifier's documentation!
+Depression Analysis Classifier's documentation.
 ===========================================================
-
-Contents
---------
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

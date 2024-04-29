@@ -20,7 +20,7 @@ def generate_output_score(total_cases, positive_cases, weight):
     Returns:
         float: Normalized score adjusted by weight, scaled to a maximum of 1.
     """
-    output = ((weight * positive_cases) / total_cases) * 10 
+    output = ((weight * positive_cases) / total_cases)
     if output >= 1:
         return 1
     return round(output, 2) 
