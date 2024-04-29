@@ -41,7 +41,7 @@ predictions = classifier.predict(X_new)
 
 where `X_train` is the training set (it is preferred to use our `composite_dataset.csv` in the folder `/data`), `y_train` are the labels associated to `X_train`.
 
-If you want to use the implementation of Text Transcription to answer some question with your microphon and try to predict a custom text, then you can try using methods inside `audio_manager.py` like this:
+If you want to use the implementation of Text Transcription to answer some question with your microphone and try to predict a custom text, then you can try using methods inside `audio_manager.py` like this:
 
 ```python
 import audio_manager
@@ -51,5 +51,5 @@ X_new = audio_manager.transcription = audio_manager.transcript_audio("record.wav
 
 ## Documentation
 
-You can check the documentation clicking [here]: build/index.html	"Here".
+You can check the documentation by checking build/index.html.
 
