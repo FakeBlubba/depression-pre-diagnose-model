@@ -68,15 +68,21 @@ def generate_score(input, depression_counter_dictionary, not_depressed_counter_d
     """
     input_set = process_input(input)
     positive_cases = 0
-    for word in depression_counter_dictionary.keys():
+    negative_cases = 0
+
+    for word in depression_counter_dictionary:
         if word in input_set:
-            positive_cases += depression_counter_dictionary[word]
-        
-    total = positive_cases    
-    for word in not_depressed_counter_dictionary.keys():
-        total += not_depressed_counter_dictionary[word]
-    
-    return generate_output_score(total, positive_cases, weight)
+            dynamic_weight = depression_counter_dictionary[word] / sum(depression_counter_dictionary.values())
+            positive_cases += depression_counter_dictionary[word] * dynamic_weight
+
+    for word in not_depressed_counter_dictionary:
+        if word in input_set:
+            dynamic_weight = not_depressed_counter_dictionary[word] / sum(not_depressed_counter_dictionary.values())
+            negative_cases += not_depressed_counter_dictionary[word] * dynamic_weight
+
+    total_cases = positive_cases + negative_cases
+
+    return generate_output_score(total_cases, positive_cases, weight)
 
 def generate_prediction_from_sentence(wordnet_score, framenet_score, sentiment_analysis_score, threshold):
     """
