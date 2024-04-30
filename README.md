@@ -51,5 +51,5 @@ X_new = audio_manager.transcription = audio_manager.transcript_audio("record.wav
 
 ## Documentation
 
-You can check the documentation by checking build/index.html.
+You can check the documentation by checking `/build/index.html`.
 
