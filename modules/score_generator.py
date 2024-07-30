@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 from process_datasets import add_wordnet_info_to_token
 import sentiment_analysis as sa
+import process_datasets
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import string
@@ -25,6 +26,33 @@ def generate_output_score(total_cases, positive_cases, weight):
         return 1
     return round(output, 2) 
 
+def generate_wn_output_score(input_text, threshold, max_penalty, tree, max_levels):
+    """
+    Generate a WordNet-based output score for the given input text.
+
+    Args:
+        input_text (str): The input text to analyze.
+        threshold (float): Threshold for similarity to consider a synset relevant.
+        max_penalty (float): Maximum penalty to apply if the synset is not found.
+        tree (list): The list of synsets to traverse.
+        max_levels (int): Maximum number of levels to explore.
+
+    Returns:
+        float: Calculated WordNet-based score.
+    """
+    main_synset = process_datasets.get_main_word_synset(input_text)
+    if main_synset:
+        data = process_datasets.find_synset_level(tree, main_synset.name(), threshold, max_levels)
+        level = data[0]
+        similarity = data[1]
+
+        if level == -1:
+            max_similarity = process_datasets.synset_similarity("dog.n.01", "dog.n.01")
+            return round(round(similarity / max_similarity, 2) - max_penalty, 2)
+
+        return round(1 - level * (round(max_penalty / max_levels, 2)), 2)
+    return 0.00
+    
 
 def generate_sentiment_analysis_score(input, weight):
     """

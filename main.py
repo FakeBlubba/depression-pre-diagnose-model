@@ -13,9 +13,10 @@ import process_datasets
 import score_generator
 import audio_manager
 from depression_analysis_classifier import DepressionAnalysisClassifier
+import sim_tree
 
 
-def main():    
+def main():   
     
     # Remove comments to start from beginning
     #datasets_list = [md.get_data_from_SAaDd(), md.get_data_from_ddrc()]

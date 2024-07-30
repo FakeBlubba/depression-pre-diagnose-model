@@ -4,6 +4,8 @@ import numpy as np
 import random
 import manage_datasets as md
 from depression_analysis_classifier import DepressionAnalysisClassifier
+from sklearn.metrics import confusion_matrix, classification_report
+
 
 def generate_weight_combinations(steps=10):
     """
@@ -98,3 +100,37 @@ y = [element[2] for element in data]
 optimize_hyperparameters(X, y, 5)
 optimize_percentage_to_maintain()
 '''
+
+
+def print_evaluation_metrics():
+    """
+    Trains the DepressionAnalysisClassifier model and prints evaluation metrics including 
+    confusion matrix, classification report, and counts of true positives, true negatives, 
+    false positives, and false negatives.
+    """
+    data = md.get_data_from_composite_dataset(cases=True) + md.get_data_from_composite_dataset(cases=False)
+    random.shuffle(data)
+    X = [element[1] for element in data]
+    y = [element[2] for element in data]
+    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    
+    model = DepressionAnalysisClassifier()
+    model.fit(X_train, y_train)
+    
+    y_pred = model.predict(X_test)
+    
+    cm = confusion_matrix(y_test, y_pred)
+    print("Confusion Matrix:")
+    print(cm)
+    
+    tn, fp, fn, tp = cm.ravel()
+    print(f"True Positives: {tp}")
+    print(f"True Negatives: {tn}")
+    print(f"False Positives: {fp}")
+    print(f"False Negatives: {fn}")
+    
+    print("\nClassification Report:")
+    print(classification_report(y_test, y_pred))
+
+print_evaluation_metrics()

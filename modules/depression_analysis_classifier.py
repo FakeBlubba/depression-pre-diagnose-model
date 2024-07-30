@@ -19,7 +19,7 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         fn_weight (float): The weight assigned to the FrameNet-derived features.
         sa_weight (float): The weight automatically assigned to the sentiment analysis features.
     """
-    def __init__(self, percentage_to_maintain = 0.15, threshold = .7, wn_weight = 0.35 , fn_weight = 0.35, sa_weight = .30):
+    def __init__(self, similarity_treshold = 1, max_penalty = round(0, 2), max_levels = 50, percentage_to_maintain = 0.15, threshold = .32, wn_weight = .35 , fn_weight = .35, sa_weight = .30):
         """
         Initializes the DepressionAnalysisClassifier with specified weights and threshold for classification.
 
@@ -29,6 +29,9 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
             wn_weight (float): Weight for the WordNet score contribution.
             fn_weight (float): Weight for the FrameNet score contribution.
         """
+        self.similarity_treshold = similarity_treshold
+        self.max_levels = max_levels
+        self.max_penalty = max_penalty
         self.percentage_to_maintain = percentage_to_maintain
         self.threshold = threshold
         self.wn_weight = wn_weight
@@ -46,7 +49,9 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         Returns:
             self: The instance of the classifier.
         """
-        depressed_data = [[index, X[index], y[index]] for index, target in enumerate(y) if target == 1]
+        self.tree = md.read_tree_from_json()
+
+        '''depressed_data = [[index, X[index], y[index]] for index, target in enumerate(y) if target == 1]
         not_depressed_data = [[index,X[index], y[index]] for index, target in enumerate(y) if target == 0]
         depressed_words = process_datasets.get_infos_from_list_of_sentences(depressed_data)
         not_depressed_words = process_datasets.get_infos_from_list_of_sentences(not_depressed_data)
@@ -61,7 +66,7 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         # FrameNet
         self.framenet_word_counter = process_datasets.get_frequent_words(fn_depressed_words)
         self.not_framenet_word_counter = process_datasets.get_frequent_words(fn_not_depressed_words)
-        
+        '''
         return self
 
     def predict(self, X):
@@ -77,8 +82,8 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         if not isinstance(X, list):
             if isinstance(X, str): 
                 X = [X]
-        try:
-            predictions = []
+        '''try:
+           predictions = []
             for text in X:
                 wn_score = score_generator.generate_score(text, self.depressed_word_counter, self.not_depressed_word_counter, self.wn_weight)
                 fm_score = score_generator.generate_score(text, self.framenet_word_counter, self.not_framenet_word_counter, self.fn_weight)
@@ -91,5 +96,13 @@ class DepressionAnalysisClassifier(BaseEstimator, ClassifierMixin):
         except Exception as e:
             print(f"Error in predict: {e}")
             pass
-        return np.array(predictions)
-    
+        return np.array(predictions)'''
+            
+        predictions = []
+        for text in X:
+            wn_score = score_generator.generate_wn_output_score(text, self.similarity_treshold, self.max_penalty, self.tree, self.max_levels)
+            print("score wn finale: ", wn_score)
+            prediction = 1 if wn_score >= self.threshold else 0
+            predictions.append(prediction)
+
+        return predictions

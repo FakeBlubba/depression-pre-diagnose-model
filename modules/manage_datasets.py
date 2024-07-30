@@ -1,5 +1,8 @@
 import pandas as pd
 import os
+import json
+from nltk.corpus import wordnet as wn
+from typing import Dict, List
 
 def get_DB_path():
     """
@@ -107,3 +110,168 @@ def get_data_from_composite_dataset(file_name="composite_db.csv", cases=True):
     except FileNotFoundError:
         return -1
 
+def get_utils_path():
+    """
+    Constructs and returns the path to the 'utils.json' file, which is located in the 'dbs' directory.
+    
+    Returns:
+        str: The absolute path to the 'utils.json' file.
+    """
+    return os.path.join(get_DB_path(), "utils.json")
+
+def write_frequent_words(freq_words):
+    """
+    Writes the frequent words and their counts to the 'utils.json' file. If the file doesn't exist, it creates it.
+    If the file is empty or the content has changed, it updates the file with the new data.
+    
+    Args:
+        freq_words (dict): A dictionary of words and their counts.
+        
+    Returns:
+        None
+    """
+    path = get_utils_path()
+    try:
+        if not os.path.exists(path):
+            with open(path, 'w') as file:
+                json.dump({"frequent_words": freq_words}, file)
+        else:
+            with open(path, 'r') as file:
+                data = json.load(file)
+            
+            if "frequent_words" not in data or data["frequent_words"] != freq_words:
+                data["frequent_words"] = freq_words
+                with open(path, 'w') as file:
+                    json.dump(data, file)
+    except FileNotFoundError:
+        with open(path, 'w') as file:
+            json.dump({"frequent_words": freq_words}, file)
+
+def read_frequent_words():
+    """
+    Reads the frequent words and their counts from the 'utils.json' file.
+    
+    Returns:
+        dict: A dictionary of words and their counts if found, otherwise an empty dictionary.
+    """
+    path = get_utils_path()
+    try:
+        with open(path, 'r') as file:
+            data = json.load(file)
+            return data.get("frequent_words", {})
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+def write_best_synsets(best_depression_synsets):
+    """
+    Writes the best depression synsets to the 'utils.json' file. If the file doesn't exist, it creates it.
+    If the file is empty or the content has changed, it updates the file with the new data.
+    
+    Args:
+        best_depression_synsets (dict): A dictionary of words and their best synsets.
+        
+    Returns:
+        None
+    """
+    path = get_utils_path()
+    try:
+        if not os.path.exists(path):
+            with open(path, 'w') as file:
+                json.dump({"best_depression_synsets": best_depression_synsets}, file)
+        else:
+            with open(path, 'r') as file:
+                data = json.load(file)
+            
+            if "best_depression_synsets" not in data or data["best_depression_synsets"] != best_depression_synsets:
+                data["best_depression_synsets"] = best_depression_synsets
+                with open(path, 'w') as file:
+                    json.dump(data, file)
+    except FileNotFoundError:
+        with open(path, 'w') as file:
+            json.dump({"best_depression_synsets": best_depression_synsets}, file)
+
+def read_best_synsets():
+    """
+    Reads the best depression synsets from the 'utils.json' file.
+    
+    Returns:
+        dict: A dictionary of words and their best synsets if found, otherwise an empty dictionary.
+    """
+    path = get_utils_path()
+    try:
+        with open(path, 'r') as file:
+            data = json.load(file)
+            return data.get("best_depression_synsets", {})
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+    
+def write_tree_to_json(tree):
+    """
+    Writes the similarity tree to the 'utils.json' file under the 'sim_tree' key.
+    If the file doesn't exist, it creates it.
+    If the file is empty or the content has changed, it updates the file with the new data.
+    
+    Args:
+        tree (dict): The tree structure to save.
+        
+    Returns:
+        None
+    """
+    path = get_utils_path()
+    try:
+        if not os.path.exists(path):
+            with open(path, 'w') as file:
+                json.dump({"sim_tree": tree}, file)
+        else:
+            with open(path, 'r') as file:
+                data = json.load(file)
+            
+            data["sim_tree"] = tree
+            with open(path, 'w') as file:
+                json.dump(data, file)
+    except FileNotFoundError:
+        with open(path, 'w') as file:
+            json.dump({"sim_tree": tree}, file)
+            
+def read_tree_from_json():
+    """
+    Reads the similarity tree from the 'utils.json' file under the 'sim_tree' key.
+    
+    Returns:
+        dict: The similarity tree structure if found, otherwise an empty dictionary.
+    """
+    path = get_utils_path()
+    try:
+        with open(path, 'r') as file:
+            data = json.load(file)
+            return data.get("sim_tree", {})
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+    
+"""def convert_names_to_synsets(tree: Dict[str, Any]) -> Dict[wn.Synset, Any]:
+
+    Converts the names of synsets in the tree to Synset objects.
+
+    Args:
+        tree (dict): The tree structure with synset names as keys.
+
+    Returns:
+        dict: The tree structure with Synset objects as keys.
+
+    if not isinstance(tree, dict):
+        return tree
+
+    converted_tree = {}
+    for synset_name, subtree in tree.items():
+        try:
+            synset = wn.synset(synset_name)
+            converted_tree[synset] = convert_names_to_synsets(subtree)
+        except wn.WordNetError:
+            print(f"Error: Synset {synset_name} not found.")
+    return converted_tree
+    """
+def print_tree(tree, level=0):
+    for synset, subtree in tree.items():
+        print('  ' * level + str(synset))
+        if isinstance(subtree, dict):
+            print_tree(subtree, level + 1)
