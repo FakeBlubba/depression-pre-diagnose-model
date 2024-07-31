@@ -8,6 +8,11 @@ import re
 import manage_datasets as md
 from nltk import pos_tag
 from collections import deque
+import langdetect
+import textstat
+import numpy as np
+
+
 
 
 def format_datasets(datasets_list):
@@ -61,7 +66,20 @@ def get_infos_from_list_of_sentences(list_of_sentences):
         sentence = get_stems_from_sentence(sentence)
         output.append([record[0], sentence, record[2]])
     return output 
-        
+
+def detect_not_correct_sentence(sentence, lang):
+    if sentence is None or (isinstance(sentence, float) and np.isnan(sentence)):
+        return False
+    
+    sentence = str(sentence)
+    try:
+        if langdetect.detect(sentence) == lang:
+            return True
+    except langdetect.lang_detect_exception.LangDetectException:
+        return True # If the sentence is too short to detect language
+    return False
+
+
 def get_infos_from_list_of_sentences_framenet(list_of_sentences):
     """
     Processes a list of sentence records by adding WordNet information to each sentence, stemming the words, 
@@ -279,12 +297,14 @@ def get_main_word_synset(sentence):
 
     tagged_tokens = pos_tag(tokens)
     
-    important_words = [word for word, tag in tagged_tokens if tag.startswith('NN') or tag.startswith('VB')]
+    important_words = [word for word, tag in tagged_tokens if tag.startswith('NN') or tag.startswith('VB') or tag.startswith('JJ')]
 
     if not important_words:
         important_words = [word for word in important_words if word in freq_words]
     if not important_words:
         important_words = tokens
+    if not important_words:
+        print(sentence, important_words, tokens)
     synset = lesk_on_multiple_words(important_words, sentence)
     return synset
 
@@ -444,6 +464,39 @@ def find_synset_level(synsets, target_synset_name, threshold, max_levels):
 
             queue.append((next_level_synsets, level + 1))
 
-    print(f"Max similarity for '{target_synset_name}': {max_similarity} - {best_match.name() if best_match else 'None'}")
+    #print(f"Max similarity for '{target_synset_name}': {max_similarity} - {best_match.name() if best_match else 'None'}")
     return (-1, max_similarity)
+
+import re
+
+def find_slang_in_sentence(sentence, slang_dict):
+    """
+    Searches for abbreviations in a sentence and returns the sentence with 
+    the abbreviation replaced by its expansion.
+
+    Args:
+        sentence (str): The sentence to be checked for slang.
+        slang_dict (dict): A dictionary of abbreviations and their details.
+
+    Returns:
+        str: The sentence with the abbreviation replaced by its expansion 
+             if an abbreviation is found.
+        bool: False if no abbreviation is found.
+    """
+    sentence_lower = sentence.lower()
+    replaced = False
+    
+    for slang, details in slang_dict.items():
+        slang_str = str(slang)
+        expansion = str(details.get('expansion', '')).lower()
+        pattern = r'\b{}\b'.format(re.escape(slang_str))
+        
+        if re.search(pattern, sentence_lower):
+            sentence = re.sub(pattern, expansion, sentence, flags=re.IGNORECASE)
+            replaced = True
+    
+    return sentence if replaced else False
+
+
+
 

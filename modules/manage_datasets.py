@@ -3,6 +3,13 @@ import os
 import json
 from nltk.corpus import wordnet as wn
 from typing import Dict, List
+import sys
+from pathlib import Path
+modules_path = Path(__file__).parent / 'modules'
+sys.path.append(str(modules_path))
+import re
+
+import process_datasets
 
 def get_DB_path():
     """
@@ -275,3 +282,182 @@ def print_tree(tree, level=0):
         print('  ' * level + str(synset))
         if isinstance(subtree, dict):
             print_tree(subtree, level + 1)
+
+def remove_not_understandable_sentences(lang, file_name = "composite_db.csv"):
+    try:
+        path = os.path.join(get_DB_path(), file_name)
+        data = pd.read_csv(path)
+        ids_to_remove = []
+        for i, e in enumerate(data.values.tolist()):
+            if not process_datasets.detect_not_correct_sentence(e[1], lang):
+                ids_to_remove.append(i)
+        data.drop(ids_to_remove, inplace=True)
+        data.to_csv(path, index=False)
+    except FileNotFoundError:
+        return -1
+
+def load_slang_dictionary(file_name = "slangs.csv"):
+    """
+    Loads abbreviations and their expansions from a CSV file into a dictionary.
+
+    Args:
+        file_name (str): Path to the CSV file containing abbreviations and their expansions.
+
+    Returns:
+        dict: A dictionary where the key is the abbreviation and
+              the value is another dictionary with 'index' and 'expansion'.
+    """
+    path = os.path.join(get_DB_path(), file_name)
+    df = pd.read_csv(path)
+    slang_dict = {}
+    for _, row in df.iterrows():
+        slang_dict[row['Abbr']] = {
+        'index': row.name,
+        'expansion': row['Fullform']
+    }
+    return slang_dict
+
+def build_slang_patterns(slang_dict):
+    """
+    Compiles regex patterns for all slangs to use in search and replace.
+
+    Args:
+        slang_dict (dict): Dictionary with slang abbreviations and their expansions.
+
+    Returns:
+        dict: A dictionary with slangs as keys and compiled regex patterns as values.
+    """
+    patterns = {}
+    for slang, details in slang_dict.items():
+        slang_str = str(slang)
+        pattern = re.compile(r'\b{}\b'.format(re.escape(slang_str)), re.IGNORECASE)
+        patterns[slang_str] = pattern
+    return patterns
+
+def replace_slangs_to_db(db_to_correct_name="composite_db.csv", slang_db="slangs.csv"):
+    path = os.path.join(get_DB_path(), db_to_correct_name)
+    df = pd.read_csv(path)
+
+    slangs = load_slang_dictionary(file_name=slang_db)
+    patterns = build_slang_patterns(slangs)
+
+    def replace_slangs_in_sentence(sentence):
+        """
+        Replaces all slangs in a given sentence with their expansions.
+
+        Args:
+            sentence (str): The sentence to process.
+
+        Returns:
+            str: The sentence with slang replacements.
+        """
+        if pd.isna(sentence):
+            return sentence
+
+        if not isinstance(sentence, str):
+            return sentence
+
+        original_sentence = sentence
+        for slang, pattern in patterns.items():
+            if pattern.search(sentence):
+                sentence = pattern.sub(slangs[slang]['expansion'], sentence)
+
+        if original_sentence != sentence:
+            print(f"Modified: Original: '{original_sentence}' -> Modified: '{sentence}'")
+
+        return sentence
+
+    df['Data'] = df['Data'].apply(replace_slangs_in_sentence)
+    df.to_csv(path, index=False)
+    print("Replaced slangs in the dataset.")
+
+
+
+            
+def remove_first_n_columns(n_col_to_remove = 4, file_name = "composite_db.csv"):
+    """
+    Removes the first n columns from a CSV file and saves the resulting DataFrame back to the same file.
+
+    Args:
+        n_col_to_remove (int): The number of the first n col to remove.
+        file_name (str): The name of the CSV file to be processed.
+
+    Returns:
+        None
+    """
+    path = os.path.join(get_DB_path(), file_name)
+    
+    try:
+        df = pd.read_csv(path)
+        df = df.iloc[:, n_col_to_remove:]
+        df.to_csv(path)
+        print(f"Removed {n_col_to_remove} columns \t {file_name}.")
+    
+    except FileNotFoundError:
+        print(f"Error: {file_name} was not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+def randomize_db(file_name, new_file_name):
+    """
+    Copies a CSV file and randomizes the order of its rows.
+
+    Args:
+        file_name (str): The name of the original CSV file to be copied.
+        new_file_name (str): The name of the new CSV file with randomized rows.
+
+    Returns:
+        None
+    """
+    original_path = os.path.join(get_DB_path(), file_name)
+    new_path = os.path.join(get_DB_path(), new_file_name)
+    
+    try:
+        df = pd.read_csv(original_path)
+        df = df.sample(frac=1).reset_index(drop=True)
+        df.to_csv(new_path)
+        print(f"Successfully copied and randomized rows from {file_name} to {new_file_name}.")
+    
+    except FileNotFoundError:
+        print(f"Error: The file {file_name} was not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+def load_happiness_data(file_name="text_emotion.csv"):
+    path = os.path.join(get_DB_path(), file_name)
+    df = pd.read_csv(path)
+    
+    happiness_df = df[df['sentiment'] == 'happiness']
+    
+    if happiness_df.empty:
+        print("No data with sentiment 'happiness' found.")
+        return
+    
+    composite_db_path = os.path.join(get_DB_path(), 'composite_db.csv')
+    if os.path.exists(composite_db_path):
+        composite_df = pd.read_csv(composite_db_path)
+        index_column = composite_df.columns[0] 
+        last_index = composite_df[index_column].max() + 1
+    else:
+        index_column = 'Index'
+        composite_df = pd.DataFrame(columns=[index_column, 'Data', 'Value'])
+        last_index = 1
+    
+    output_df = pd.DataFrame({
+        'Data': happiness_df['content'].tolist(),
+        'Value': [1] * len(happiness_df)
+    })
+    
+    output_df[index_column] = range(last_index, last_index + len(output_df))
+    
+    composite_df = pd.concat([composite_df, output_df], ignore_index=True)
+    
+    composite_df.to_csv(composite_db_path, index=False)
+    
+    print(f"Data appended to {composite_db_path}")
+
+
+
+
+

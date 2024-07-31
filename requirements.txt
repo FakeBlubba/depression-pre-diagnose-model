@@ -6,3 +6,5 @@ assemblyai
 pysoundfile
 pandas
 textblob
+langdetect
+textstat

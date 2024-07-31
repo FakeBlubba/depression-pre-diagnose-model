@@ -48,10 +48,11 @@ def generate_wn_output_score(input_text, threshold, max_penalty, tree, max_level
 
         if level == -1:
             max_similarity = process_datasets.synset_similarity("dog.n.01", "dog.n.01")
-            return round(round(similarity / max_similarity, 2) - max_penalty, 2)
+            return round(similarity / max_similarity - max_penalty, 2)
 
-        return round(1 - level * (round(max_penalty / max_levels, 2)), 2)
-    return 0.00
+        return round(1 - (level * (max_penalty / max_levels)), 2)
+    print(f"{input_text} - NOT FOUND MAIN_SYNSET")
+    return -1
     
 
 def generate_sentiment_analysis_score(input, weight):

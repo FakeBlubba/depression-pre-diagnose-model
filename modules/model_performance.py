@@ -5,6 +5,7 @@ import random
 import manage_datasets as md
 from depression_analysis_classifier import DepressionAnalysisClassifier
 from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.model_selection import train_test_split
 
 
 def generate_weight_combinations(steps=10):
@@ -100,7 +101,21 @@ y = [element[2] for element in data]
 optimize_hyperparameters(X, y, 5)
 optimize_percentage_to_maintain()
 '''
+def print_accuracy_on_n_examples(data, n):
+    model = DepressionAnalysisClassifier() 
+    if len(data) < n: n = len(data) 
+    X = [x[1] for x in data[1:n + 1]]
+    y = [x[2] for x in data[1:n + 1]]
+    count = 0
+    total = 0
+    model.fit(X, y)
+    results = model.predict(X)
+    for i, e in enumerate(results):
+        if(results[i] == y[i]):
+            count += 1
+        total += 1
 
+    print(f"count: {count}\t total: {total}\t percentage: {100* (count / total)}")
 
 def print_evaluation_metrics():
     """
@@ -132,5 +147,3 @@ def print_evaluation_metrics():
     
     print("\nClassification Report:")
     print(classification_report(y_test, y_pred))
-
-print_evaluation_metrics()
