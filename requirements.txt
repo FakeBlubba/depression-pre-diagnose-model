@@ -8,3 +8,6 @@ pandas
 textblob
 langdetect
 textstat
+transformers 
+torch 
+scikit-learn

@@ -13,8 +13,6 @@ import textstat
 import numpy as np
 
 
-
-
 def format_datasets(datasets_list):
     """
     Formats a list of datasets, where specific formatting rules apply to the first dataset
