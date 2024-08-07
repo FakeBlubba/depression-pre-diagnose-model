@@ -90,7 +90,7 @@ def create_dataset(data, file_name="composite_db.csv"):
         else:
             print("Error: Data format is incorrect. Each element must be a list with exactly two elements.")
 
-def get_data_from_composite_dataset(file_name="composite_db.csv", cases=True):
+def get_data_from_composite_dataset(file_name="composite_db.csv", cases=None):
     """
     Loads data from a CSV file located in the 'dbs' directory and optionally filters the rows based
     on the depression indicator (third column in the dataset). It also ensures that the second column
@@ -116,9 +116,11 @@ def get_data_from_composite_dataset(file_name="composite_db.csv", cases=True):
         path = os.path.join(get_DB_path(), file_name)
         dataframe = pd.read_csv(path)
 
-        if cases in [True, False]:  
-            dataframe = dataframe[dataframe.iloc[:, 2] == int(cases)]
-        return [element for index, element in enumerate(dataframe.values.tolist()) if isinstance(element[1], str)]
+        if cases is not None:
+            dataframe = dataframe[dataframe['Value'] == int(cases)]
+        
+        return [element for element in dataframe.values.tolist() if isinstance(element[0], str)]
+    
     except FileNotFoundError:
         return -1
 

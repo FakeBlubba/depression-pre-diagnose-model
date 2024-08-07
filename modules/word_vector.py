@@ -1,6 +1,8 @@
+
+# pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 # For CUDA
+# pip3 install torch torchvision torchaudio # For no GPU
+
 import pandas as pd
-#from transformers import BertTokenizer, BertModel
-#from gensim.models import KeyedVectors
 import nltk
 from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import word_tokenize
@@ -9,8 +11,15 @@ from pathlib import Path
 import sys
 import string
 import os
-from transformers import BertTokenizer, BertForSequenceClassification
 import torch
+from torch.utils.data import TensorDataset, DataLoader
+
+import tensorflow as tf
+import tensorflow_hub as hub
+import tensorflow_text as text
+#from official.nlp import optimization
+from transformers import BertTokenizer
+
 from sklearn.model_selection import train_test_split
 
 modules_path = Path(__file__).parent / 'modules'
@@ -25,7 +34,7 @@ import dataset_checker
 from depression_analysis_classifier import DepressionAnalysisClassifier
 
 
-
+#tf.get_logger().setLevel('ERROR')
 def preprocess_text(text, use_wordnet=False):
     """
     Preprocesses the given text by tokenizing, removing stopwords, and applying stemming.
@@ -119,9 +128,78 @@ preprocessed_sentence2 = preprocess_text("This is an example sentence.", False)
 
 print("Processata con WordNet: ", preprocessed_sentence, "\nProcessata senza WordNet: ", preprocessed_sentence2)'''
 
+def split_sets(db_name="composite_db.csv", test_size=0.2, val_size=0.2, seed = 42):
+    """
+    Splits the dataset into training, validation, and test sets.
 
-df = preprocess_data("composite_db.csv")
-train_texts, val_texts, train_labels, val_labels = train_test_split(df['Processed_Data'], df['Label'], test_size=0.2, random_state=42)
+    Args:
+        db_name (str): The name of the CSV file to load data from.
+        test_size (float): Proportion of the dataset to include in the test split.
+        val_size (float): Proportion of the training dataset to include in the validation split.
 
-train_dataset = encode_data(train_texts, train_labels, tokenizer)
-val_dataset = encode_data(val_texts, val_labels, tokenizer)
+    Returns:
+        dict: A dictionary containing the train, validation, and test datasets as TensorDatasets.
+    """
+    data = md.get_data_from_composite_dataset(file_name=db_name)
+    
+    if data == -1:
+        raise FileNotFoundError(f"{db_name}: Not Found!")
+    
+    df = pd.DataFrame(data, columns=['Data', 'Value'])
+    
+    texts = df['Data']
+    labels = df['Value']
+    
+    texts_train_val, texts_test, labels_train_val, labels_test = train_test_split(
+        texts, labels, test_size=test_size, stratify=labels, random_state=seed
+    )
+    
+    texts_train, texts_val, labels_train, labels_val = train_test_split(
+        texts_train_val, labels_train_val, test_size=val_size, stratify=labels_train_val, random_state=seed
+    )
+    
+    train_dataset = encode_data(texts_train, labels_train, tokenizer)
+    val_dataset = encode_data(texts_val, labels_val, tokenizer)
+    test_dataset = encode_data(texts_test, labels_test, tokenizer)
+    
+    return {
+        'train': train_dataset,
+        'val': val_dataset,
+        'test': test_dataset
+    }
+def create_dataloaders(data_dict, batch_size=32):
+    """
+    Creates DataLoaders for the train, validation, and test datasets.
+
+    Args:
+        train_dataset (TensorDataset): The training dataset.
+        val_dataset (TensorDataset): The validation dataset.
+        test_dataset (TensorDataset): The test dataset.
+        batch_size (int): The batch size for the DataLoaders.
+
+    Returns:
+        dict: A dictionary containing DataLoaders for train, validation, and test datasets.
+    """
+    train_loader = DataLoader(data_dict['train'], batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(data_dict['val'], batch_size=batch_size, shuffle=False)
+    test_loader = DataLoader(data_dict['test'], batch_size=batch_size, shuffle=False)
+    
+    return {
+        'train': train_loader,
+        'val': val_loader,
+        'test': test_loader
+    }
+
+d = split_sets()
+loaded = create_dataloaders(d, batch_size=32)
+for batch in loaded["train"]:
+    input_ids, attention_masks, labels = batch
+    # Ogni frase ha diversi ID, non è detto che corrispondano a ogni parola
+    print(f"Input IDs: {input_ids}")    
+    # Ogni frase ha diversi attention mask (1), servono a dire se il singolo token deve essere considerato oppure se no (0)
+    print(f"Attention Masks: {attention_masks}")  
+    # Le etichette del database
+    print(f"Labels: {labels}")
+    break  
+
+#train_texts, val_texts, train_labels, val_labels = train_test_split(df['Data'], df['Value'], test_size=0.2, random_state=42)

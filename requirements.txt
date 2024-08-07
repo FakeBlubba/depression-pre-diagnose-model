@@ -1,4 +1,4 @@
-numpy
+"numpy==1.*"
 scikit-learn
 nltk
 sounddevice
@@ -6,8 +6,11 @@ assemblyai
 pysoundfile
 pandas
 textblob
-langdetect
 textstat
-transformers 
-torch 
+langdetect
 scikit-learn
+pandas
+torch
+tensorflow-text
+tf-models-official
+transformers
