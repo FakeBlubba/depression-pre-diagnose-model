@@ -66,6 +66,16 @@ def get_data_from_ddrc():
     except FileNotFoundError:
         return -1
 
+
+def load_database(db_name = "composite_db.csv"):
+    df = get_data_from_composite_dataset(db_name)
+    
+    
+    texts = [x[0] for x in df[1:]]
+    labels = [x[1] for x in df[1:]]
+    return texts, labels
+
+
 def create_dataset(data, file_name="composite_db.csv"):
     """
     Creates a CSV file from the provided data and saves it to the specified file within the 'dbs' directory.
@@ -81,7 +91,6 @@ def create_dataset(data, file_name="composite_db.csv"):
         None: The function does not return any value but writes directly to a file.
     """
     path = os.path.join(get_DB_path(), file_name)
-    #print(data[0][1])
     for dt in data:
         if all(len(row) == 2 for row in dt):
             df = pd.DataFrame(dt, columns=["Data", "Value"])
