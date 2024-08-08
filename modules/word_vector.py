@@ -2,6 +2,7 @@
 # pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 # For CUDA
 # pip3 install torch torchvision torchaudio # For no GPU
 
+import numpy as np
 import pandas as pd
 import nltk
 from nltk.corpus import stopwords, wordnet
@@ -11,6 +12,7 @@ from pathlib import Path
 import sys
 import string
 import os
+from sklearn.metrics import classification_report, confusion_matrix
 import torch
 from torch.utils.data import TensorDataset, DataLoader
 import tensorflow as tf
@@ -19,6 +21,7 @@ import tensorflow_text as text
 #from official.nlp import optimization
 from transformers import BertTokenizer
 from sklearn.model_selection import train_test_split
+from sklearn.metrics.pairwise import cosine_similarity
 
 modules_path = Path(__file__).parent / 'modules'
 sys.path.append(str(modules_path))
@@ -34,7 +37,9 @@ import kagglehub
 
 
 class BertDepressionClassifier:
-    def __init__(self, model = None, model_url = "C:\\Users\\Federico\\.cache\\kagglehub\\models\\tensorflow\\bert\\tensorFlow2\\bert-en-uncased-l-8-h-768-a-12\\2", tokenizer_name='bert-base-uncased', max_length=128, batch_size=32):
+    def __init__(self, 
+                preprocessor_url = 'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3', 
+                encoder_url = 'https://tfhub.dev/tensorflow/bert_en_uncased_L-12_H-768_A-12/4'):
         """
         Initialize the BertDepressionClassifier with model URL, tokenizer name, maximum token length, and batch size.
         
@@ -44,12 +49,54 @@ class BertDepressionClassifier:
             max_length (int): The maximum length of tokenized sequences.
             batch_size (int): The batch size for DataLoader.
         """
-        self.model = model
-        self.model_url = model_url
-        self.tokenizer = BertTokenizer.from_pretrained(tokenizer_name)
-        self.max_length = max_length
-        self.batch_size = batch_size
+        self.preprocessor = hub.KerasLayer(preprocessor_url)
+        self.encoder = hub.KerasLayer(encoder_url)
         
+    def get_data_processed(self, database_name):
+        texts, labels = md.load_database(database_name)
+        df = {'Data': texts, 'Value': labels}
+        return df
+        
+    def train_data(self, dataframe_balanced):
+        X_train, X_test, y_train, y_test = train_test_split(dataframe_balanced['Data'], dataframe_balanced['Value'], stratify = dataframe_balanced['Value'])
+        return X_train, X_test, y_train, y_test
+    
+    def get_sentences_embedding(self, sentences):
+        preprocessed_text = self.preprocessor(sentences)
+        return self.encoder(preprocessed_text)['pooled_output']
+    
+    def compare_two_sentences(self, first_sentence, second_sentence):
+        return cosine_similarity([first_sentence], [second_sentence])
+    
+    def create_model(self):
+        
+        # Bert Layers
+        input_layer = tf.keras.layers.Input(shape = (), dtype = tf.string, name = "text")
+        preprocessed_text = self.preprocessor(input_layer)
+        outputs = self.encoder(preprocessed_text)
+        
+        # Neural Network Layers
+        layer = tf.keras.layers.Dropout(0.1, name = 'dropout')(outputs['pooled_output'])    # Regularization to Avoid overfitting
+        layer = tf.keras.layers.Dense(1, activation = 'sigmoid', name = "output")(layer)    # Converts output between 0 and 1
+        model = tf.keras.Model(inputs = [input_layer], outputs = [layer])
+        
+        return model
+
+    def compile_model(self, model):
+        METRICS = [
+            tf.keras.metrics.BinaryAccuracy(name = 'accuracy'),
+            tf.keras.metrics.Precision(name = 'precision'),
+            tf.keras.metrics.Recall(name = 'recall')
+        ]
+        model.compile(optimizer = "adam", loss = "binary_crossentropy", metrics = METRICS)
+        return model
+        
+    
+    
+    
+    
+    
+    
     def build_model(self, print = False):
         """
         Builds the BERT-based classification model.
@@ -290,7 +337,7 @@ class BertDepressionClassifier:
 
 def main():
     classifier = BertDepressionClassifier()
-    classifier.build_model()
+    '''classifier.build_model()
     
     # Preprocess the data
     data_dict = classifier.split_sets()
@@ -302,8 +349,25 @@ def main():
     # Make predictions
     test_texts = ["I feel sad today", "I'm really happy"]
     predictions = classifier.predict(test_texts)
-    print("Predictions:", predictions)
+    print("Predictions:", predictions)'''
+    
+    d = classifier.get_data_processed("composite_db.csv")
+    X_train, X_test, y_train, y_test = classifier.train_data(d)
+    model = classifier.create_model()
+    model = classifier.compile_model(model)
+    model.fit(X_train, y_train, epochs = 6)
+    model.evaluate(X_test, y_test)
 
+
+    y_predicted = model.predict(X_test)
+    y_predicted = y_predicted.flatten()
+    y_predicted = np.where(y_predicted > 0.5, 1, 0)
+    print(y_predicted)
+    
+    
+    # Metrics
+    cm = confusion_matrix(y_test, y_predicted)
+    print(f"Confusion Matrix\n{cm}\n{classification_report(y_test, y_predicted)}")
 main()
 
 
