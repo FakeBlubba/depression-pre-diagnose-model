@@ -38,7 +38,7 @@ import kagglehub
 class BertDepressionClassifier:
     def __init__(self, 
                 preprocessor_url = 'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3', 
-                encoder_url = "https://www.kaggle.com/models/google/universal-sentence-encoder/TensorFlow2/cmlm-en-large/1"):
+                encoder_url = 'https://www.kaggle.com/models/google/experts-bert/TensorFlow2/pubmed/2'):
         """
         Initialize the BertDepressionClassifier with model URL, tokenizer name
 
@@ -83,7 +83,7 @@ class BertDepressionClassifier:
         
         for part_layer in rnn_layers:
             layer = tf.keras.layers.Dropout(0.1, name = 'dropout')(outputs['pooled_output'])    # Regularization to Avoid overfitting
-        layer = tf.keras.layers.Dense(1, activation = 'sigmoid', name = "output")(layer)    # Converts output between 0 and 1
+        layer = tf.keras.layers.Dense(1, activation = 'relu', name = "output")(layer)    # Converts output between 0 and 1
         return tf.keras.Model(inputs = [input_layer], outputs = [layer])
     
     def compile_model(self, model):
