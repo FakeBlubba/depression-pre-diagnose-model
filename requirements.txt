@@ -1,4 +1,3 @@
-"numpy==1.*"
 scikit-learn
 nltk
 sounddevice
@@ -14,3 +13,5 @@ torch
 tensorflow-text
 tf-models-official
 transformers
+portaudio-devel
+numpy==1.*

@@ -1,4 +1,3 @@
-
 # pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 # For CUDA
 # pip3 install torch torchvision torchaudio # For no GPU
 
@@ -32,13 +31,17 @@ import score_generator
 import audio_manager
 import dataset_checker
 from depression_analysis_classifier import DepressionAnalysisClassifier
+import os
 
-import kagglehub
+
+
+
 
 class BertDepressionClassifier:
-    def __init__(self, 
-                preprocessor_url = 'https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3', 
-                encoder_url = 'https://www.kaggle.com/models/google/experts-bert/TensorFlow2/pubmed/2'):
+    def __init__(self,
+                preprocessor_url = "https://kaggle.com/models/tensorflow/bert/TensorFlow2/en-uncased-preprocess/3",
+                encoder_url = "https://www.kaggle.com/models/google/universal-sentence-encoder/TensorFlow2/cmlm-en-large/1",
+                learning_rate = 0.005):
         """
         Initialize the BertDepressionClassifier with model URL, tokenizer name
 
@@ -48,6 +51,7 @@ class BertDepressionClassifier:
         """
         self.preprocessor = hub.KerasLayer(preprocessor_url)
         self.encoder = hub.KerasLayer(encoder_url)
+        self.learning_rate = learning_rate
 
     def get_data_processed(self, database_name):
         texts, labels = md.load_database(database_name)
@@ -66,100 +70,76 @@ class BertDepressionClassifier:
         return cosine_similarity([first_sentence], [second_sentence])
 
     def create_model(self):
+        # Input BERT Layers
+        input_layer = tf.keras.layers.Input(shape=(), dtype=tf.string, name="text")
+        # Lambda Layer to preprocess
+        preprocessed_text = tf.keras.layers.Lambda(lambda x: self.preprocessor(x))(input_layer)
 
-        # Bert Layers
-        input_layer = tf.keras.layers.Input(shape = (), dtype = tf.string, name = "text")
-        preprocessed_text = self.preprocessor(input_layer)
-        outputs = self.encoder(preprocessed_text)
+        outputs = self.encoder(preprocessed_text)  
 
-        # Neural Network Layers
-        layer = tf.keras.layers.Dropout(0.1, name = 'dropout')(outputs['pooled_output'])    # Regularization to Avoid overfitting
-        layer = tf.keras.layers.Dense(1, activation = 'sigmoid', name = "output")(layer)    # Converts output between 0 and 1
-        model = tf.keras.Model(inputs = [input_layer], outputs = [layer])
+        # Adding Dense Layers
+        # Parameters: 
+        #   - Units: number of neurons
+        #       - Higher Number: capture more specs
+        #       - Lower Number: Prevent Overfitting
+        #   - Activation: type of function desidered
+        #
+        # Higher layer number: -
+        x = tf.keras.layers.Dropout(0.5, name='dropout_1')(outputs['pooled_output'])  # Regularization: 0.x is the percentage of neurons to deactivate to prevent overfitting
+        x = tf.keras.layers.Dense(128, activation='relu', name='dense_1')(x)          
+        x = tf.keras.layers.Dropout(0.5, name='dropout_2')(x)                         
+        x = tf.keras.layers.Dense(128, activation='relu', name='dense_2')(x)           
+        x = tf.keras.layers.Dropout(0.5, name='dropout_3')(x)                         
 
+        # Output Layer
+        output_layer = tf.keras.layers.Dense(1, activation='sigmoid', name='output')(x)
+
+        model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer])
         return model
 
-    def create_RNN_layers(input_layer, outputs, rnn_layers): # [{Dropout_rate: int, Dense_layer_neuron_number: int, activation_type: str}]
-        
-        for part_layer in rnn_layers:
-            layer = tf.keras.layers.Dropout(0.1, name = 'dropout')(outputs['pooled_output'])    # Regularization to Avoid overfitting
-        layer = tf.keras.layers.Dense(1, activation = 'relu', name = "output")(layer)    # Converts output between 0 and 1
-        return tf.keras.Model(inputs = [input_layer], outputs = [layer])
-    
+
     def compile_model(self, model):
+        optimizer = tf.keras.optimizers.Adam(learning_rate = self.learning_rate)
+
+
         METRICS = [
             tf.keras.metrics.BinaryAccuracy(name = 'accuracy'),
             tf.keras.metrics.Precision(name = 'precision'),
             tf.keras.metrics.Recall(name = 'recall')
         ]
-        model.compile(optimizer = "adam", loss = "binary_crossentropy", metrics = METRICS)
+
+        model.compile(optimizer = optimizer, loss = "binary_crossentropy", metrics = METRICS)
         return model
-
-    def preprocess_text(self, text, use_wordnet=False):
-        """
-        Preprocesses the given text by tokenizing, removing stopwords, and applying stemming.
-        
-        Args:
-            text (str): The text to preprocess.
-            use_wordnet (bool): Whether to use WordNet for additional processing.
-        
-        Returns:
-            str: The processed text.
-        """
-        tokens = word_tokenize(text.lower())
-        
-        stop_words = set(stopwords.words('english'))
-        tokens = [word for word in tokens if word not in stop_words and word not in string.punctuation]
-        
-        stemmer = PorterStemmer()
-        tokens = [stemmer.stem(word) for word in tokens]
-        
-        if use_wordnet:
-            synset = process_datasets.get_main_word_synset(text)
-            if synset:
-                lemma_names = synset.lemma_names()
-                definition = synset.definition()
-                synset_info = [lemma_names, definition]
-                examples = synset.examples()
-                if examples:
-                    synset_info.append(f"{examples}")
-                tokens = [preprocess_text(str(s)) for s in synset_info]
-                tokens = list(set([item for sublist in tokens for item in sublist]))
-
+    
 
 def main():
-    classifier = BertDepressionClassifier()
-    '''classifier.build_model()
-    
-    # Preprocess the data
-    data_dict = classifier.split_sets()
-    dataloaders = classifier.create_dataloaders(data_dict)
-    
-    # Train the model
-    classifier.fit(dataloaders['train'], dataloaders['val'], epochs=3)
-    
-    # Make predictions
-    test_texts = ["I feel sad today", "I'm really happy"]
-    predictions = classifier.predict(test_texts)
-    print("Predictions:", predictions)'''
-    
-    d = classifier.get_data_processed("composite_db.csv")
-    X_train, X_test, y_train, y_test = classifier.train_data(d)
-    model = classifier.create_model()
-    model = classifier.compile_model(model)
-    model.fit(X_train, y_train, epochs = 3)
-    model.evaluate(X_test, y_test)
+    try:
+        classifier = BertDepressionClassifier()
+        d = classifier.get_data_processed("composite_db.csv")
+        #for i, e in enumerate(d):
+        #    print(d[i])
+        #    d[i] = process_datasets.enrich_sentence_with_gloss(d[i])
+            
+        X_train, X_test, y_train, y_test = classifier.train_data(d)
+        model = classifier.create_model()
+        tf.keras.utils.plot_model(model)
+        model = classifier.compile_model(model)
 
+        model.fit(X_train, y_train, epochs = 3, batch_size = 120)
+        model.evaluate(X_test, y_test)
+    
+        y_predicted = model.predict(X_test)
+        y_predicted = y_predicted.flatten()
+        y_predicted = np.where(y_predicted > 0.5, 1, 0)
+        print(y_predicted)
+    
+        # Metrics
+        cm = confusion_matrix(y_test, y_predicted)
+        print(f"Confusion Matrix\n{cm}\n{classification_report(y_test, y_predicted)}")
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
-    y_predicted = model.predict(X_test)
-    y_predicted = y_predicted.flatten()
-    y_predicted = np.where(y_predicted > 0.5, 1, 0)
-    print(y_predicted)
-    
-    
-    # Metrics
-    cm = confusion_matrix(y_test, y_predicted)
-    print(f"Confusion Matrix\n{cm}\n{classification_report(y_test, y_predicted)}")
 main()
 
 
@@ -175,4 +155,3 @@ for batch in loaded["train"]:
     # Le etichette del database
     print(f"Labels: {labels}")
     break  '''
-
