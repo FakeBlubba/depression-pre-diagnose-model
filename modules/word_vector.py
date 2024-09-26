@@ -33,12 +33,7 @@ import dataset_checker
 from depression_analysis_classifier import DepressionAnalysisClassifier
 import os
 
-import kagglehub
 
-# Download latest version
-path = kagglehub.model_download("google/universal-sentence-encoder/tensorFlow2/cmlm-en-large")
-
-print("Path to model files:", path)
 
 
 
@@ -46,7 +41,7 @@ class BertDepressionClassifier:
     def __init__(self,
                 preprocessor_url = "https://kaggle.com/models/tensorflow/bert/TensorFlow2/en-uncased-preprocess/3",
                 encoder_url = "https://www.kaggle.com/models/google/universal-sentence-encoder/TensorFlow2/cmlm-en-large/1",
-                learning_rate = 0.016):
+                learning_rate = 0.005):
         """
         Initialize the BertDepressionClassifier with model URL, tokenizer name
 
@@ -77,23 +72,30 @@ class BertDepressionClassifier:
     def create_model(self):
         # Input BERT Layers
         input_layer = tf.keras.layers.Input(shape=(), dtype=tf.string, name="text")
-        print(input_layer)
-        preprocessed_text = self.preprocessor(input_layer)  
+        # Lambda Layer to preprocess
+        preprocessed_text = tf.keras.layers.Lambda(lambda x: self.preprocessor(x))(input_layer)
+
         outputs = self.encoder(preprocessed_text)  
-        
+
         # Adding Dense Layers
-        x = tf.keras.layers.Dropout(0.2, name='dropout_1')(outputs['pooled_output'])  
+        # Parameters: 
+        #   - Units: number of neurons
+        #       - Higher Number: capture more specs
+        #       - Lower Number: Prevent Overfitting
+        #   - Activation: type of function desidered
+        #
+        # Higher layer number: -
+        x = tf.keras.layers.Dropout(0.5, name='dropout_1')(outputs['pooled_output'])  # Regularization: 0.x is the percentage of neurons to deactivate to prevent overfitting
         x = tf.keras.layers.Dense(128, activation='relu', name='dense_1')(x)          
-        x = tf.keras.layers.Dropout(0.2, name='dropout_2')(x)                         
-        x = tf.keras.layers.Dense(64, activation='relu', name='dense_2')(x)           
-        x = tf.keras.layers.Dropout(0.2, name='dropout_3')(x)                         
+        x = tf.keras.layers.Dropout(0.5, name='dropout_2')(x)                         
+        x = tf.keras.layers.Dense(128, activation='relu', name='dense_2')(x)           
+        x = tf.keras.layers.Dropout(0.5, name='dropout_3')(x)                         
 
         # Output Layer
         output_layer = tf.keras.layers.Dense(1, activation='sigmoid', name='output')(x)
 
         model = tf.keras.Model(inputs=[input_layer], outputs=[output_layer])
         return model
-
 
 
     def compile_model(self, model):
@@ -113,21 +115,17 @@ class BertDepressionClassifier:
 def main():
     try:
         classifier = BertDepressionClassifier()
-        print('CLASSIFICATORE')
         d = classifier.get_data_processed("composite_db.csv")
-        print("DATASET")
+        #for i, e in enumerate(d):
+        #    print(d[i])
+        #    d[i] = process_datasets.enrich_sentence_with_gloss(d[i])
+            
         X_train, X_test, y_train, y_test = classifier.train_data(d)
-        print(X_train[:5])
-        
-
-        X_train = tf.convert_to_tensor(X_train, dtype=tf.string)
-        X_test = tf.convert_to_tensor(X_test, dtype=tf.string)
-        y_train = tf.convert_to_tensor(y_train, dtype=tf.float32)
-        y_test = tf.convert_to_tensor(y_test, dtype=tf.float32)
-
         model = classifier.create_model()
+        tf.keras.utils.plot_model(model)
         model = classifier.compile_model(model)
-        model.fit(X_train, y_train, epochs = 3)
+
+        model.fit(X_train, y_train, epochs = 3, batch_size = 120)
         model.evaluate(X_test, y_test)
     
         y_predicted = model.predict(X_test)

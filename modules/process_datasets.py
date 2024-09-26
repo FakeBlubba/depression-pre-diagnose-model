@@ -161,6 +161,26 @@ def add_wordnet_info_to_token(context):
     tokens = list(set(tokens))
     return context + " " + " ".join(tokens)
 
+def enrich_sentence_with_gloss(sentence):
+    synset = get_main_word_synset(sentence)
+    
+    if synset and synset != sentence:  
+        gloss_tokens = set(word_tokenize(synset.definition()))
+        for example in synset.examples():
+            gloss_tokens.update(set(word_tokenize(example)))
+        for hypernym in synset.hypernyms():
+            gloss_tokens.update(set(word_tokenize(hypernym.definition())))
+            for example in hypernym.examples():
+                gloss_tokens.update(set(word_tokenize(example)))
+
+        gloss_string = ' '.join(gloss_tokens)
+
+        enriched_sentence = sentence + " " + gloss_string
+        return enriched_sentence
+    
+    return sentence  # Se non c'è un synset o non è stato modificato, ritorna la frase originale
+
+
 def overlap_context_synset(context, synset):
     """
     Calculates the number of words in common between a given context (a set of words) and 
@@ -302,7 +322,8 @@ def get_main_word_synset(sentence):
     if not important_words:
         important_words = tokens
     if not important_words:
-        print(sentence, important_words, tokens)
+        # TODO: to test
+        pass
     synset = lesk_on_multiple_words(important_words, sentence)
     return synset
 
