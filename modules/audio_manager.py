@@ -66,7 +66,7 @@ def save_audio_file(file_name):
     sf.write(file_name, recorded_audio, fs)
 
 # TODO save key in .env
-def transcript_audio(file_name, KEY = "2f1cb1f1178d454bbf8ffe55db3a6551"):
+def transcript_audio(file_name, KEY = "INSERT API KEY"):
     """
     Transcribes audio from a file using an API and prints the transcription or error message.
 
