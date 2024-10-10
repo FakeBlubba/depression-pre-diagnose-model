@@ -1,0 +1,15 @@
+numpy==1.*
+scikit-learn
+nltk
+pandas
+textblob
+textstat
+langdetect
+scikit-learn
+pandas
+torch
+torchvision
+torchaudio
+tensorflow-text==2.10
+tf-models-official
+transformers
