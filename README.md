@@ -1,5 +1,5 @@
 # Depression Analysis Classifier
-> [WARNING] This branch is not complete but it can give an overview of the try done using nltk libraries to capture language marks that could express depression.
+> [!ALERT] This branch is not complete but it can give an overview of the try done using nltk libraries to capture language marks that could express depression.
 ## Overview
 The Depression Analysis Classifier is a machine learning tool designed to predict depression from textual data. It utilizes linguistic features derived from WordNet, FrameNet, and sentiment analysis to perform classification. This project aims to contribute to mental health initiatives by providing an automated method to detect potential signs of depression in written text.
 
