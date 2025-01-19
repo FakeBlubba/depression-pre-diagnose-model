@@ -20,11 +20,14 @@ from pathlib import Path
 modules_path = Path(__file__).parent / 'modules'
 sys.path.append(str(modules_path))
 import manage_datasets as md
+import kagglehub
 
-
-
+# Download latest version
+#path = kagglehub.model_download("tensorflow/bert/tensorFlow2/en-uncased-preprocess")
+path = kagglehub.model_download("google/universal-sentence-encoder/tensorFlow2/cmlm-en-large")
+print("Path to model files:", path)
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-
+os.environ["TFHUB_MODEL_LOAD_FORMAT"] = "UNCOMPRESSED"
 
 class BertDepressionClassifier:
     def __init__(self,
@@ -80,7 +83,7 @@ class BertDepressionClassifier:
         # Input BERT Layers
         input_layer = tf.keras.layers.Input(shape=(), dtype=tf.string, name="text")
         preprocessed_text = self.preprocessor(input_layer)  
-        outputs = self.encoder(preprocessed_text)  
+        outputs = self.encoder(preprocessed_text)['default']
 
         # Adding Dense Layers
         # Parameters: 
@@ -123,5 +126,4 @@ class BertDepressionClassifier:
 
         model.compile(optimizer = optimizer, loss = "binary_crossentropy", metrics = METRICS)
         return model
-    
 

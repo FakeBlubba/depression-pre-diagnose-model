@@ -1,0 +1,121 @@
+Start_Time,End_Time,Text,Confidence
+4.7,5.3,okay,0.9752684831619263
+8.9,10.5, okay okay,0.9658364653587341
+13.9,14.4, okay,0.9577944874763489
+38.7,40.5, goodbye okay okay,0.8861637115478516
+41.7,42.6, I'll turn around,0.6449109315872192
+54.6,55.6, I'm not a therapist,0.9300144910812378
+61.7,62.6, and please feel,0.7197623252868652
+70.3,71.0, are you okay,0.9763021469116211
+72.5,73.0, yes,0.8159128427505493
+75.7,76.2, yes,0.9773029088973999
+83.4,84.0, fine,0.8945198059082031
+86.2,86.7, okay,0.9752636551856995
+95.8,96.8, Chicago,0.9876290559768677
+106.9,108.7, universities,0.9244990348815918
+110.2,111.3, places to go,0.9549992084503174
+113.7,114.3, fight,0.8231759667396545
+116.6,117.4, besides,0.8048326969146729
+118.9,120.2, the beaches,0.9212014079093933
+130.5,133.2, crime crowded,0.9716048836708069
+134.8,138.3, Prime crowded the air air,0.8533957004547119
+146.4,147.2, you travel a lot,0.97039794921875
+148.8,149.4, no,0.9532301425933838
+155.2,164.2, I get around transportation in the buses so I get use the buses,0.89253169298172
+177.5,181.8, going to Universal cities places like Universal City,0.8555762767791748
+182.6,183.3, walkway,0.8878313899040222
+189.6,190.9, computer,0.9285738468170166
+192.4,194.2, nursing Healthcare,0.8898413181304932
+200.7,205.5, look for employment,0.9644832611083984
+207.4,214.5, I write antique shopping travel a little bit,0.839798629283905
+215.8,216.7, visit,0.977849543094635
+218.3,219.1, things like that,0.9426587820053101
+225.4,226.4, what's your dream job,0.9876290559768677
+228.7,231.2, my dream job is come,0.8842931389808655
+234.1,234.9, riding,0.7479672431945801
+239.6,240.0, shy,0.8817801475524902
+243.8,246.0, tell me about your relationship with your family,0.9876290559768677
+247.6,249.8, oh it's cordial,0.9473065137863159
+251.4,256.9, Brothers Brothers on nieces nephews cordial,0.95862877368927
+272.3,280.3, music maybe and play music go antique shopping,0.91532963514328
+286.4,288.3, watch TV things like that,0.867000162601471
+296.5,298.3, very good,0.9786435961723328
+299.7,300.4, very good,0.9772822260856628
+307.3,308.0, when was the,0.9831957817077637
+311.5,313.6, acumen,0.9168213605880737
+316.9,317.7, I didn't,0.7242935299873352
+321.2,323.2, brother with a brother,0.7958323955535889
+325.3,325.9, brother,0.9574182033538818
+327.8,332.8, it was about calling him and using the,0.9387767314910889
+334.9,339.5, the Star 82 before I call him 2 * 82,0.715925395488739
+351.5,352.3, differently,0.9402422904968262
+353.7,355.2, can't think of anything,0.9683319330215454
+357.0,358.3, I can't lose you,0.9070131182670593
+361.2,365.5, I can't think of anything right now I can't think right now,0.9621683955192566
+378.1,380.3, the hardest decision I ever had to make,0.9412367343902588
+387.4,388.3, going to,0.8331923484802246
+393.1,394.4, wish my memory,0.7508492469787598
+397.6,399.6, probably being in the military,0.8491690754890442
+405.4,406.6, yeah yes,0.7991841435432434
+407.8,408.5, yes yes,0.9744661450386047
+411.3,412.6, 18,0.9146530628204346
+414.4,415.5, 18 years old,0.9571340680122375
+421.7,427.1, college education experience things like that,0.9668397903442383
+432.8,434.5, yes yes yes,0.9681552052497864
+438.4,439.0, yes,0.9821751117706299
+447.4,448.3, no no,0.9299491047859192
+454.5,455.6, how easy was it for you,0.7918707132339478
+459.5,465.6, it was not very easy it was not very easy,0.9875717163085938
+476.5,478.4, I went to school,0.9858554005622864
+480.0,480.5, school,0.9372919201850891
+484.3,485.0, I went to school,0.9716642498970032
+491.9,497.7, why you probably become very distrustful of some men probably,0.881736159324646
+499.0,501.0, distrust,0.9805116653442383
+509.8,510.7, okay okay,0.9315721392631531
+513.4,513.9, okay,0.9752636551856995
+519.9,521.1, how,0.9404760599136353
+524.8,526.6, oh trouble sleeping,0.8377132415771484
+537.7,539.1, it's very hard,0.9472922086715698
+540.1,540.6, her,0.707729697227478
+541.6,542.4, very hard,0.9520368576049805
+544.7,545.5, very hard,0.8898840546607971
+552.8,560.7, very cranky cranky just cranky cranky can't concentrate too well just cranky,0.9471098184585571
+561.8,562.9, for concentration,0.921130359172821
+569.2,570.6, have you ever been tag cast,0.8651577830314636
+571.8,572.8, yes,0.9578286409378052
+575.3,575.8, yes,0.8788769841194153
+577.3,577.9, yes,0.9890808463096619
+589.7,590.8, about 7 years ago,0.8527364730834961
+596.8,599.4, mistrust,0.9392932653427124
+601.1,602.1, trouble sleeping,0.981299102306366
+605.9,609.4, waking up jolted from sleeping things like that,0.9469093680381775
+617.9,620.0, yes yes air yeah,0.7394658327102661
+625.8,627.8, well it was like that,0.9427681565284729
+629.6,630.6, Airborne training,0.9908124804496765
+631.7,632.7, Airborne training,0.980446994304657
+634.2,636.7, and I'd put in a great big tower,0.9459559917449951
+637.7,642.4, and just training and not being able to jump off the tower,0.9667667746543884
+652.0,653.7, well counseling,0.9922992587089539
+655.5,660.7, just counseling counseling in counseling and trying to overcome a fear of heights,0.8811131119728088
+663.3,664.1, and being pushed,0.8881809115409851
+665.2,666.1, from training Tower,0.9394330978393555
+676.2,682.1, history of work trouble at work things like that social problems trouble at work things like that,0.9332042336463928
+688.3,690.8, you still going to therapy now yes,0.8673254251480103
+698.1,701.2, you feel therapy in Hughesville yes,0.8975310921669006
+703.1,703.8, yes yes,0.9439899325370789
+713.0,734.4, well I was shoved off of tower when I went and refused to jump basically I was shoved off when I I froze mentally and physically but not supposed to show jump off this power and I froze I couldn't jump I got afraid I look down and couldn't right ahead and I was just shut off the tower and,0.9552725553512573
+736.0,738.2, basically told I was worthless so,0.7242664694786072
+746.1,746.9, tengas,0.6057144999504089
+759.9,767.6, all starts maybe. On and off during the weeks so just maybe we could Our Song,0.8685638308525085
+771.7,772.2, great,0.9006956815719604
+775.2,777.4, who has been a positive influence in your life,0.9225893020629883
+779.0,781.9, the Women's Health Center,0.9467893838882446
+787.3,787.8, well,0.9508652687072754
+788.8,793.9, there's a there's a psychologist there a psychiatrist at the women's health clinic in West LA,0.8349347114562988
+805.0,807.3, quiet introvert,0.9822742938995361
+816.5,816.9, oh,0.8583612442016602
+819.5,822.2, like I said antique shopping probably,0.9684680700302124
+823.6,824.5, antique shopping,0.9723790287971497
+836.7,840.4, trying to go forward just trying to go for it,0.8936418890953064
+847.1,848.2, thanks for sharing your thoughts,0.9312372803688049
+4.7,885.0, and just give me a second,0.9609565734863281

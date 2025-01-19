@@ -5,7 +5,7 @@ from typing import Dict, List
 import sys
 from pathlib import Path
 import re
-def get_DB_path():
+def get_DB_path(path = "data"):
     """
     Constructs and returns the path to the 'dbs' directory, which is located in the parent
     directory of the script currently being executed.
@@ -14,7 +14,7 @@ def get_DB_path():
         str: The absolute path to the 'dbs' directory.
     """
     DB_PATH = "\\".join(os.path.dirname(os.path.abspath(__file__)).split("\\")[:-1])
-    return  os.path.join(DB_PATH, "dbs")
+    return  os.path.join(DB_PATH, path)
 
 def get_data_from_SAaDd():
     """
@@ -63,11 +63,16 @@ def get_data_from_ddrc():
 
 def load_database(db_name = "composite_db.csv"):
     df = get_data_from_composite_dataset(db_name)
-    
-    
+
     texts = [x[0] for x in df[1:]]
-    labels = [x[1] for x in df[1:]]
-    return texts, labels
+    labels = [int(x[1]) for x in df[1:]]
+    if len(texts) == len(labels) and all(isinstance(x, str) for x in texts) and all(isinstance(x, int) for x in labels):
+        return texts, labels
+    else:
+        print("Same number of elements each texts and labels: ", len(texts) == len(labels))
+        print("\nAll Texts are strings: ", all(isinstance(x, str) for x in texts))
+        print("\nAll Labels are integers: ", all(isinstance(x, int) for x in labels))
+        return None
 
 
 def create_dataset(data, file_name="composite_db.csv"):
@@ -284,7 +289,15 @@ def append_data_to_composite(prepared_df):
     
     print(f"Data appended to {composite_db_path}")
 
-    
 
+def get_test_set_ids():
+    df = pd.read_csv("data/test_split.csv")
+    participant_ids = df['Participant_ID'].tolist()
+    return participant_ids
 
-
+def get_test_set_texts():
+    participant_ids = get_test_set_ids()
+    base_df = pd.read_csv("data/base.csv")
+    X_test = base_df[base_df['ID'].isin(participant_ids)]['Text'].tolist()
+    y_test = base_df[base_df['ID'].isin(participant_ids)]['Value'].tolist()
+    return [X_test, y_test]
