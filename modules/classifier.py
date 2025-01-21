@@ -20,19 +20,19 @@ from pathlib import Path
 modules_path = Path(__file__).parent / 'modules'
 sys.path.append(str(modules_path))
 import manage_datasets as md
-import kagglehub
+'''import kagglehub
 
 # Download latest version
 #path = kagglehub.model_download("tensorflow/bert/tensorFlow2/en-uncased-preprocess")
 path = kagglehub.model_download("google/universal-sentence-encoder/tensorFlow2/cmlm-en-large")
-print("Path to model files:", path)
+print("Path to model files:", path)'''
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 os.environ["TFHUB_MODEL_LOAD_FORMAT"] = "UNCOMPRESSED"
 
 class BertDepressionClassifier:
     def __init__(self,
-                preprocessor_url = "https://kaggle.com/models/tensorflow/bert/TensorFlow2/en-uncased-preprocess/3",
-                encoder_url = "https://www.kaggle.com/models/google/universal-sentence-encoder/TensorFlow2/cmlm-en-large/1",
+                preprocessor_url = "C:\\Users\\Federico\\.cache\\kagglehub\\models\\tensorflow\\bert\\tensorFlow2\\en-uncased-preprocess\\3",
+                encoder_url = "C:\\Users\\Federico\\.cache\\kagglehub\\models\\google\\universal-sentence-encoder\\tensorFlow2\\cmlm-en-large\\1",
                 learning_rate = 0.016):
         """
         Initialize the BertDepressionClassifier with model URL, tokenizer name
@@ -83,7 +83,7 @@ class BertDepressionClassifier:
         # Input BERT Layers
         input_layer = tf.keras.layers.Input(shape=(), dtype=tf.string, name="text")
         preprocessed_text = self.preprocessor(input_layer)  
-        outputs = self.encoder(preprocessed_text)['default']
+        outputs = self.encoder(preprocessed_text)  
 
         # Adding Dense Layers
         # Parameters: 

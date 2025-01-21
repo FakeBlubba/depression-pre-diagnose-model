@@ -8,18 +8,17 @@ from classifier import BertDepressionClassifier
 import manage_datasets as md
 import dataset_checker as dc
 import numpy as np
-import kagglehub
 
 
 from sklearn.metrics import confusion_matrix, classification_report
 def main():
     try:
-                # Download latest version
+        '''        # Download latest version
         path = kagglehub.model_download("https://www.kaggle.com/models/google/universal-sentence-encoder/TensorFlow2/cmlm-en-large")
 
-        print("Path to model files:", path)
+        print("Path to model files:", path)'''
         classifier = BertDepressionClassifier()
-        d = classifier.get_data_processed("composite_db.csv")
+        d = classifier.get_data_processed("filtered_positive_csv\\all_files_confidence\\binary_dataset_single_and_all_files_0.08_0.13.csv")
         X_train, X_test, y_train, y_test = classifier.train_data(d)
         tests = md.get_test_set_texts()
         X_test = tests[0]
