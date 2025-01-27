@@ -7,7 +7,6 @@ from classifier import BertDepressionClassifier
 import manage_datasets as md
 import dataset_checker as dc
 import numpy as np
-import kagglehub
 
 
 import tensorflow as tf

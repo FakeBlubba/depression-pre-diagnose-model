@@ -28,6 +28,7 @@ import kagglehub
 # Download latest version
 path = kagglehub.model_download("tensorflow/bert/tensorFlow2/en-uncased-preprocess")
 path = kagglehub.model_download("google/universal-sentence-encoder/tensorFlow2/cmlm-en-large")
+print("Path to model files:", path)
 print("Path to model files:", path)'''
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 os.environ["TFHUB_MODEL_LOAD_FORMAT"] = "UNCOMPRESSED"
@@ -90,6 +91,7 @@ class BertDepressionClassifier:
         # Input BERT Layers
         input_layer = tf.keras.layers.Input(shape=(), dtype=tf.string, name="text")
         preprocessed_text = self.preprocessor(input_layer)  
+        outputs = self.encoder(preprocessed_text)  
         outputs = self.encoder(preprocessed_text)  
 
         # Adding Dense Layers
@@ -164,44 +166,44 @@ class BertDepressionClassifier:
 
         return {"accuracy": accuracy, "precision": precision, "recall": recall, "f1": f1}
 
-def simple_cross_validation(self, X, y, n_splits=10):
-        """
-        Run cross-validation
+    def simple_cross_validation(self, X, y, n_splits=10):
+            """
+            Run cross-validation
 
-        Args:
-            X (array-like): Input Data
-            y (array-like): Labels.
-            n_splits (int): Number of Splits.
+            Args:
+                X (array-like): Input Data
+                y (array-like): Labels.
+                n_splits (int): Number of Splits.
 
-        Returns:
-            dict: Metriche medie (accuracy, precision, recall).
-        """
-        kf = KFold(n_splits=n_splits, shuffle=True, random_state=42)
-        accuracies = []
-        precisions = []
-        recalls = []
+            Returns:
+                dict: Metriche medie (accuracy, precision, recall).
+            """
+            kf = KFold(n_splits=n_splits, shuffle=True, random_state=42)
+            accuracies = []
+            precisions = []
+            recalls = []
 
-        for train_index, test_index in kf.split(X):
-            X_train, X_test = np.array(X)[train_index], np.array(X)[test_index]
-            y_train, y_test = np.array(y)[train_index], np.array(y)[test_index]
+            for train_index, test_index in kf.split(X):
+                X_train, X_test = np.array(X)[train_index], np.array(X)[test_index]
+                y_train, y_test = np.array(y)[train_index], np.array(y)[test_index]
 
-            model = self.create_model()
-            model = self.compile_model(model)
-            model.fit(X_train, y_train, epochs=3, verbose=0)
+                model = self.create_model()
+                model = self.compile_model(model)
+                model.fit(X_train, y_train, epochs=3, verbose=0)
 
-            y_pred = model.predict(X_test).flatten()
-            y_pred = np.where(y_pred > 0.5, 1, 0)
+                y_pred = model.predict(X_test).flatten()
+                y_pred = np.where(y_pred > 0.5, 1, 0)
 
-            accuracy = np.mean(y_pred == y_test)
-            precision = np.sum((y_pred == 1) & (y_test == 1)) / np.sum(y_pred == 1) if np.sum(y_pred == 1) > 0 else 0
-            recall = np.sum((y_pred == 1) & (y_test == 1)) / np.sum(y_test == 1) if np.sum(y_test == 1) > 0 else 0
+                accuracy = np.mean(y_pred == y_test)
+                precision = np.sum((y_pred == 1) & (y_test == 1)) / np.sum(y_pred == 1) if np.sum(y_pred == 1) > 0 else 0
+                recall = np.sum((y_pred == 1) & (y_test == 1)) / np.sum(y_test == 1) if np.sum(y_test == 1) > 0 else 0
 
-            accuracies.append(accuracy)
-            precisions.append(precision)
-            recalls.append(recall)
+                accuracies.append(accuracy)
+                precisions.append(precision)
+                recalls.append(recall)
 
-        return {
-            "accuracy": np.mean(accuracies),
-            "precision": np.mean(precisions),
-            "recall": np.mean(recalls),
-        }
+            return {
+                "accuracy": np.mean(accuracies),
+                "precision": np.mean(precisions),
+                "recall": np.mean(recalls),
+            }

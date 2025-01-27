@@ -5002,4 +5002,11 @@ pie
     "1": 66
 ```
 
+# Risultati Addestramento
+
+## Addestramento con composite_dataset
+
+![image-20250121211850003](C:\Users\Federico\AppData\Roaming\Typora\typora-user-images\image-20250121211850003.png)
+
+## Addestramento con binary dataset idoneo 24% di discrepanza tra le classi
 
