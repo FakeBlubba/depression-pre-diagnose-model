@@ -141,11 +141,9 @@ def generate_row_markdown(row, threshold):
 '''
 
 def create_or_clean_report_file(file_name="report_confidence.md"):
-    if os.path.exists(file_name):
-        with open(file_name, "w") as file:
-            file.write("")  
-    else:
+    if not os.path.exists(file_name):
         open(file_name, "w").close()
+
 
 def populate_report_with_rows(rows, threshold, file_name="report_confidence.md"):
     content = generate_main_info_markdown(threshold) + f"\n\n{generate_threshold_report(rows, threshold)}\n\n"
@@ -218,7 +216,8 @@ def generate_final_report(loss, accuracy, precision, recall, file_name):
         f.write("\n## Final Evaluation\n")
         f.write("| Loss | Accuracy | Precision | Recall |\n")
         f.write("|------|----------|-----------|--------|\n")
-        f.write(f"|{loss:.4f}|{accuracy:.4f}|{precision:.4f}|{recall:.4f}|\n")
+        f.write(f"| {loss:.4f} | {accuracy:.4f} | {precision:.4f} | {recall:.4f} |\n")
+
 
 def train_and_log_markdown(X_train, y_train, X_test, y_test, model, file_name, learning_rate, preprocessor_url, encoder_url):
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate), loss="binary_crossentropy", metrics=["accuracy", "precision", "recall"])

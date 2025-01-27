@@ -5,6 +5,9 @@ from typing import Dict, List
 import sys
 from pathlib import Path
 import re
+from pathlib import Path
+
+
 def get_DB_path(path = "data"):
     """
     Constructs and returns the path to the 'dbs' directory, which is located in the parent
@@ -290,14 +293,32 @@ def append_data_to_composite(prepared_df):
     print(f"Data appended to {composite_db_path}")
 
 
-def get_test_set_ids():
-    df = pd.read_csv("data/test_split.csv")
+def get_test_set_ids(test_set_path = "data/test_split.csv"):
+    df = pd.read_csv(test_set_path)
     participant_ids = df['Participant_ID'].tolist()
     return participant_ids
 
-def get_test_set_texts():
-    participant_ids = get_test_set_ids()
-    base_df = pd.read_csv("data/base.csv")
+def get_test_set_texts(test_set_path = "data/test_split.csv", base_dataset_path = "data/base.csv"):
+    participant_ids = get_test_set_ids(test_set_path)
+    base_df = pd.read_csv(base_dataset_path)
     X_test = base_df[base_df['ID'].isin(participant_ids)]['Text'].tolist()
     y_test = base_df[base_df['ID'].isin(participant_ids)]['Value'].tolist()
-    return [X_test, y_test]
+    return X_test, y_test
+
+def get_train_and_test_set(train_set_path, test_set_path = "data/test_split.csv", base_dataset_path = "data/base.csv"):
+    X_train, y_train = load_database(train_set_path)
+    X_test, y_test = get_test_set_texts(test_set_path, base_dataset_path)
+    X_train_output = []
+    y_train_output  = []
+    
+    
+    test_set = set(X_test)
+    for x, y in zip(X_train, y_train):
+        if x not in test_set:
+            X_train_output.append(x)
+            y_train_output.append(y)
+            
+    return X_train, X_test, y_train, y_test
+    
+
+
