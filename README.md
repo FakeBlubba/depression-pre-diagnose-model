@@ -1,29 +1,73 @@
-# Depression Analysis Classifier
+# Depression Pre-Diagnosis Model
 
-## Overview
-The **Depression Analysis Classifier** is a machine learning tool designed to predict signs of depression from text data. It uses Transformer-based models, such as BERT, to analyze language and classify texts, with the goal of contributing to mental health initiatives by offering an automated method to detect potential symptoms of depression.
+NLP classifier for detecting signs of depression from text responses, built on BERT. Designed as a research tool to support mental health screening workflows.
+
+---
+
+## What it does
+
+Given a text input — a written response or a transcribed audio answer — the model classifies whether it contains linguistic markers associated with depression, using a fine-tuned BERT encoder.
+
+The system supports both text and audio input pipelines, making it applicable to interview-style screening contexts.
+
+## Architecture
+
+```
+Text input / Audio transcription
+        ↓
+   Preprocessing & tokenization
+        ↓
+   BERT encoder (fine-tuned)
+        ↓
+   Binary classification head
+        ↓
+   Depression indicator score
+```
 
 ## Features
-- **BERT-Based Classification**: The system relies on the BERT encoder to understand and classify text, taking advantage of modern advances in pre-trained language models.
-- **Customizable Hyperparameters**: Allows adjustment of key parameters such as learning rate to improve model performance.
-- **Integration with Audio Transcription**: Includes the ability to transcribe audio responses for text analysis if needed.
 
-## Installation
-To set up the project, follow these steps:
+- **BERT-based classification** — fine-tuned transformer encoder for mental health NLP
+- **Audio transcription support** — converts spoken responses to text for analysis
+- **Configurable hyperparameters** — learning rate, batch size, epochs adjustable via config
+- **GPU/CPU compatible** — runs on both configurations
 
-### Prerequisites
-1. Make sure you have **Python 3.6+** installed on your system.
-2. Install the dependencies specified in the `requirements.txt` file with the command:
+## Tech stack
 
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. If you want to use a configuration with a GPU you have to check on the pytorch site how to do it properly given the different versions
+- Python · PyTorch · Transformers (HuggingFace) · BERT
+- Audio transcription pipeline
+- scikit-learn · numpy
 
-Otherwise, for a configuration without GPU, use the following command:
+## Setup
 
+**Requirements:** Python 3.6+
+
+```bash
+pip install -r requirements.txt
+```
+
+For GPU support, follow the [PyTorch installation guide](https://pytorch.org/get-started/locally/) for your CUDA version.
+
+For CPU only:
 ```bash
 pip3 install torch torchvision torchaudio
 ```
 
-If it doesn't work you should probably check on https://pytorch.org/get-started/locally/.
+## Usage
+
+```bash
+python main.py
+```
+
+Input can be provided as raw text or via the audio transcription module.
+
+## Dataset & scope
+
+This model is a research prototype intended for pre-diagnostic support — not a clinical tool. It should be used only as an exploratory aid, not as a substitute for professional mental health assessment.
+
+## Branch
+
+Active development is on the `BERT-VARIANT` branch.
+
+---
+
+**Topics:** `nlp` `bert` `mental-health` `classification` `pytorch` `transformers` `python`
